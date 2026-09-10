@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APIzza | Pizzeria</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="container navbar-content">
+      <div class="logo">🍕 APIzza</div>
+      <nav>
+        <a href="#menu">Menu</a>
+        <a href="#pedido">Mi pedido</a>
+        <a id="docs-link" href="http://localhost:5000/swagger" target="_blank" rel="noopener">
+          Docs API
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-content">
+      <h1>La pizza que pediste, hecha por una API.</h1>
+      <p>Menu en vivo, conectado directo a nuestro backend. Elegi, armá tu pedido y mandalo.</p>
+      <a href="#menu" class="btn btn-primary">Ver el menu</a>
+    </div>
+  </section>
+
+  <main class="container">
+
+    <section id="menu" class="section">
+      <h2>Nuestro menu</h2>
+      <div class="filtros" id="filtros">
+        <button class="filtro activo" data-categoria="">Todas</button>
+        <button class="filtro" data-categoria="clasica">Clasicas</button>
+        <button class="filtro" data-categoria="especial">Especiales</button>
+        <button class="filtro" data-categoria="vegetariana">Vegetarianas</button>
+      </div>
+
+      <div id="estado-carga" class="estado-carga">Cargando pizzas desde la API...</div>
+      <div id="grid-pizzas" class="grid-pizzas"></div>
+    </section>
+
+    <section id="pedido" class="section">
+      <h2>Mi pedido</h2>
+      <div id="carrito-vacio" class="carrito-vacio">Todavia no agregaste ninguna pizza.</div>
+      <ul id="lista-carrito" class="lista-carrito"></ul>
+      <div id="total-carrito" class="total-carrito"></div>
+
+      <form id="form-pedido" class="form-pedido" hidden>
+        <h3>Tus datos</h3>
+        <input type="text" id="nombre" placeholder="Nombre" required />
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="tel" id="telefono" placeholder="Telefono" />
+        <input type="text" id="direccion" placeholder="Direccion de entrega" />
+        <button type="submit" class="btn btn-primary">Confirmar pedido</button>
+      </form>
+      <div id="mensaje-pedido" class="mensaje-pedido"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p>APIzza &copy; 2026 — Proyecto de ejemplo con ASP.NET Core (C#) + SQLite + Swagger.</p>
+      <p>
+        Backend corriendo en <code>http://localhost:5000</code> —
+        <a href="http://localhost:5000/swagger" target="_blank" rel="noopener">ver documentacion Swagger</a>
+      </p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
