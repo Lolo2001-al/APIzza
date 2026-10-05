@@ -1,0 +1,48 @@
+@model PedidoViewModel
+@{
+    ViewData["Title"] = "Hacer pedido";
+}
+
+<h1 class="titulo">Hacer pedido</h1>
+
+<form asp-action="Crear" method="post" class="formulario">
+    <div asp-validation-summary="ModelOnly" class="error"></div>
+
+    <section class="caja">
+        <h2>1. Elegí tus pizzas</h2>
+        @for (var i = 0; i < Model.Lineas.Count; i++)
+        {
+            <div class="linea">
+                <input type="hidden" asp-for="Lineas[i].PizzaId" />
+                <div class="linea-info">
+                    <strong>@Model.Lineas[i].Nombre</strong>
+                    <small>@Model.Lineas[i].Descripcion</small>
+                </div>
+                <span class="precio">$@Model.Lineas[i].Precio.ToString("N0")</span>
+                <input type="number" asp-for="Lineas[i].Cantidad" min="0" max="20" class="cantidad" />
+                <span asp-validation-for="Lineas[i].Cantidad" class="error"></span>
+            </div>
+        }
+    </section>
+
+    <section class="caja">
+        <h2>2. Tus datos</h2>
+
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" />
+        <span asp-validation-for="Nombre" class="error"></span>
+
+        <label asp-for="Email"></label>
+        <input asp-for="Email" />
+        <span asp-validation-for="Email" class="error"></span>
+
+        <label asp-for="Telefono"></label>
+        <input asp-for="Telefono" type="tel" />
+
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" />
+        <span asp-validation-for="Direccion" class="error"></span>
+
+        <button type="submit" class="btn">Confirmar pedido</button>
+    </section>
+</form>

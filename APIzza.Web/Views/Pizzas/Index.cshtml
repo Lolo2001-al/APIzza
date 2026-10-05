@@ -1,0 +1,30 @@
+@model MenuViewModel
+@{
+    ViewData["Title"] = "Menú";
+    var sinFiltro = string.IsNullOrEmpty(Model.CategoriaActual);
+}
+
+<h1 class="titulo">Nuestro menú</h1>
+
+<div class="filtros">
+    <a class="@("filtro" + (sinFiltro ? " activo" : ""))" asp-action="Index">Todas</a>
+    @foreach (var categoria in Model.Categorias)
+    {
+        <a class="@("filtro" + (Model.CategoriaActual == categoria ? " activo" : ""))"
+           asp-action="Index" asp-route-categoria="@categoria">@categoria</a>
+    }
+</div>
+
+@if (Model.Pizzas.Count == 0)
+{
+    <p class="vacio">No hay pizzas en esta categoría.</p>
+}
+else
+{
+    <div class="grilla">
+        @foreach (var pizza in Model.Pizzas)
+        {
+            <partial name="_TarjetaPizza" model="pizza" />
+        }
+    </div>
+}

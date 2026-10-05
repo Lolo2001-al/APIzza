@@ -1,0 +1,16 @@
+@model Pizza
+@{
+    ViewData["Title"] = Model.Nombre;
+}
+
+<div class="detalle">
+    <div class="@("detalle-banda cat-" + Model.Categoria)"><img src="@Url.Content(PizzaImagen.Obtener(Model.Nombre))" alt="Pizza @Model.Nombre" /></div>
+    <div class="detalle-cuerpo">
+        <span class="etiqueta">@Model.Categoria</span>
+        <h1>@Model.Nombre</h1>
+        <p>@Model.Descripcion</p>
+        <div class="precio grande">$@Model.Precio.ToString("N0")</div>
+        <a class="btn" asp-controller="Pedidos" asp-action="Crear" asp-route-pizzaId="@Model.Id">Pedir esta pizza</a>
+        <a class="btn btn-borde oscuro" asp-action="Index">Volver al menú</a>
+    </div>
+</div>

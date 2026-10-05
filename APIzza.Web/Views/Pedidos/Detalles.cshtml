@@ -1,0 +1,41 @@
+@model Pedido
+@{
+    ViewData["Title"] = "Pedido #" + Model.Id;
+}
+
+<h1 class="titulo">Pedido #@Model.Id</h1>
+
+<div class="caja">
+    <p><strong>Cliente:</strong> @Model.Cliente?.Nombre (@Model.Cliente?.Email)</p>
+    <p><strong>Dirección:</strong> @Model.Cliente?.Direccion</p>
+    <p><strong>Fecha:</strong> @Model.CreadoEn.ToString("dd/MM/yyyy HH:mm")</p>
+    <p><strong>Estado:</strong> <span class="estado">@Model.Estado</span></p>
+</div>
+
+<div class="tabla-scroll">
+    <table class="tabla">
+        <thead>
+            <tr>
+                <th>Pizza</th>
+                <th>Cantidad</th>
+                <th>Precio unitario</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td>@item.Pizza?.Nombre</td>
+                    <td>@item.Cantidad</td>
+                    <td>$@item.PrecioUnitario.ToString("N0")</td>
+                    <td>$@((item.PrecioUnitario * item.Cantidad).ToString("N0"))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="total">Total: $@Model.Total.ToString("N0")</div>
+
+<a class="btn btn-borde oscuro" asp-action="Index">Volver a pedidos</a>

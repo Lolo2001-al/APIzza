@@ -1,0 +1,16 @@
+@model Pizza
+
+<article class="tarjeta">
+    <a class="@("tarjeta-banda cat-" + Model.Categoria)" asp-controller="Pizzas" asp-action="Detalles" asp-route-id="@Model.Id" aria-label="Ver @Model.Nombre">
+        <img src="@Url.Content(PizzaImagen.Obtener(Model.Nombre))" alt="Pizza @Model.Nombre" loading="lazy" />
+    </a>
+    <div class="tarjeta-cuerpo">
+        <span class="etiqueta">@Model.Categoria</span>
+        <h3><a asp-controller="Pizzas" asp-action="Detalles" asp-route-id="@Model.Id">@Model.Nombre</a></h3>
+        <p class="desc">@Model.Descripcion</p>
+        <div class="tarjeta-final">
+            <span class="precio">$@Model.Precio.ToString("N0")</span>
+            <a class="tarjeta-pedir" asp-controller="Pedidos" asp-action="Crear" asp-route-pizzaId="@Model.Id" aria-label="Pedir @Model.Nombre">Pedir <span aria-hidden="true">↗</span></a>
+        </div>
+    </div>
+</article>

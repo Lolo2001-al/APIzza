@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "Mk7q/9woU98=",
+  "success": true,
+  "projectFilePath": "/home/et12alumno/Descargas/APIzza-mvc/APIzza.Web/APIzza.Web.csproj",
+  "expectedPackageFiles": [
+    "/home/et12alumno/.nuget/packages/microsoft.data.sqlite.core/10.0.12/microsoft.data.sqlite.core.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.entityframeworkcore/10.0.12/microsoft.entityframeworkcore.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.entityframeworkcore.abstractions/10.0.12/microsoft.entityframeworkcore.abstractions.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.entityframeworkcore.analyzers/10.0.12/microsoft.entityframeworkcore.analyzers.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.entityframeworkcore.relational/10.0.12/microsoft.entityframeworkcore.relational.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.entityframeworkcore.sqlite/10.0.12/microsoft.entityframeworkcore.sqlite.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.entityframeworkcore.sqlite.core/10.0.12/microsoft.entityframeworkcore.sqlite.core.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/microsoft.extensions.dependencymodel/10.0.12/microsoft.extensions.dependencymodel.10.0.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.12/sqlitepclraw.bundle_e_sqlite3.2.1.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/sqlitepclraw.core/2.1.12/sqlitepclraw.core.2.1.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.12/sqlitepclraw.lib.e_sqlite3.2.1.12.nupkg.sha512",
+    "/home/et12alumno/.nuget/packages/sqlitepclraw.provider.e_sqlite3/2.1.12/sqlitepclraw.provider.e_sqlite3.2.1.12.nupkg.sha512"
+  ],
+  "logs": []
+}

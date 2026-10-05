@@ -1,0 +1,41 @@
+@model List<Pedido>
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h1 class="titulo">Pedidos</h1>
+
+@if (Model.Count == 0)
+{
+    <p class="vacio">Todavía no hay pedidos. <a asp-action="Crear">Hacé el primero</a>.</p>
+}
+else
+{
+    <div class="tabla-scroll">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pedido in Model)
+                {
+                    <tr>
+                        <td>@pedido.Id</td>
+                        <td>@pedido.CreadoEn.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@pedido.Cliente?.Nombre</td>
+                        <td><span class="estado">@pedido.Estado</span></td>
+                        <td>$@pedido.Total.ToString("N0")</td>
+                        <td><a asp-action="Detalles" asp-route-id="@pedido.Id">Ver</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

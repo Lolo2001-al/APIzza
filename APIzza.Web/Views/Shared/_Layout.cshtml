@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | APIzza</title>
+    <meta name="description" content="Descubrí el menú de APIzza, elegí tus pizzas favoritas y hacé tu pedido online." />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header class="barra">
+        <div class="contenedor barra-contenido">
+            <a class="logo" asp-controller="Home" asp-action="Index" aria-label="APIzza, volver al inicio"><span class="logo-marca" aria-hidden="true">✳</span> API<span>zza</span><b>.</b></a>
+            <nav class="navegacion" aria-label="Navegación principal">
+                <a asp-controller="Home" asp-action="Index">Inicio</a>
+                <a asp-controller="Pizzas" asp-action="Index">Menú</a>
+                <a asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+            </nav>
+            <a class="btn btn-nav" asp-controller="Pedidos" asp-action="Crear">Hacer pedido <span aria-hidden="true">↗</span></a>
+        </div>
+    </header>
+
+    <main class="contenedor">
+        @if (TempData["Mensaje"] is string mensaje)
+        {
+            <div class="aviso">@mensaje</div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor pie-contenido">
+            <div>
+                <a class="logo logo-pie" asp-controller="Home" asp-action="Index"><span class="logo-marca" aria-hidden="true">✳</span> API<span>zza</span><b>.</b></a>
+                <p>Pizza para compartir, disfrutar y repetir.</p>
+            </div>
+            <div class="pie-enlaces">
+                <span>EXPLORÁ</span>
+                <a asp-controller="Home" asp-action="Index">Inicio</a>
+                <a asp-controller="Pizzas" asp-action="Index">Nuestro menú</a>
+                <a asp-controller="Pedidos" asp-action="Crear">Hacer un pedido</a>
+                <a asp-controller="Pedidos" asp-action="Index">Ver pedidos</a>
+            </div>
+        </div>
+        <div class="contenedor pie-base"><span>© @DateTime.Now.Year APIzza.</span><span>Hecho con ganas de pizza.</span></div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,110 @@
+@model List<Pizza>
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<section class="hero" aria-labelledby="hero-titulo">
+    <div class="hero-texto">
+        <span class="sobretitulo"><span class="sobretitulo-punto"></span> BIENVENIDO A APIZZA</span>
+        <h1 id="hero-titulo">Una buena pizza<br />hace <em>el día.</em></h1>
+        <p>Clásicas que nunca fallan, especiales para probar algo nuevo y opciones vegetarianas. Elegí la tuya y hacé tu pedido en minutos.</p>
+        <div class="hero-botones">
+            <a class="btn" asp-controller="Pedidos" asp-action="Crear">Pedir ahora <span aria-hidden="true">↗</span></a>
+            <a class="btn btn-borde" asp-controller="Pizzas" asp-action="Index">Explorar el menú</a>
+        </div>
+        <div class="hero-pie"><span class="hero-pie-icono" aria-hidden="true">✦</span> Elegí, pedí y disfrutá.</div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+        <span class="hero-circulo hero-circulo-uno"></span>
+        <span class="hero-circulo hero-circulo-dos"></span>
+        <img src="~/images/pizzas/napolitana.svg" alt="" />
+        <span class="hero-etiqueta">Hecha con<br /><strong>mucho sabor</strong></span>
+    </div>
+</section>
+
+<div class="cinta" aria-label="Nuestras variedades">
+    <span>CLÁSICAS</span><i aria-hidden="true">✳</i>
+    <span>ESPECIALES</span><i aria-hidden="true">✳</i>
+    <span>VEGETARIANAS</span><i aria-hidden="true">✳</i>
+    <span>HECHAS PARA COMPARTIR</span>
+</div>
+
+<section class="seccion categorias" aria-labelledby="categorias-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="seccion-kicker">ENCONTRÁ TU FAVORITA</span>
+            <h2 id="categorias-titulo">Una pizza para cada antojo.</h2>
+        </div>
+        <a class="enlace-flecha" asp-controller="Pizzas" asp-action="Index">Ver todo el menú <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="categorias-grilla">
+        <a class="categoria-card categoria-clasica" asp-controller="Pizzas" asp-action="Index" asp-route-categoria="clasica">
+            <span class="categoria-numero">01 / EL SABOR DE SIEMPRE</span>
+            <span class="categoria-nombre">Clásicas</span>
+            <span class="categoria-descripcion">Muzzarella y Napolitana, las favoritas de siempre.</span>
+            <span class="categoria-flecha" aria-hidden="true">↗</span>
+        </a>
+        <a class="categoria-card categoria-especial" asp-controller="Pizzas" asp-action="Index" asp-route-categoria="especial">
+            <span class="categoria-numero">02 / PARA PROBAR ALGO NUEVO</span>
+            <span class="categoria-nombre">Especiales</span>
+            <span class="categoria-descripcion">Fugazzeta y Cuatro Quesos para darte un gusto.</span>
+            <span class="categoria-flecha" aria-hidden="true">↗</span>
+        </a>
+        <a class="categoria-card categoria-veggie" asp-controller="Pizzas" asp-action="Index" asp-route-categoria="vegetariana">
+            <span class="categoria-numero">03 / LLENA DE COLOR</span>
+            <span class="categoria-nombre">Vegetarianas</span>
+            <span class="categoria-descripcion">Una combinación de verduras y mucho sabor.</span>
+            <span class="categoria-flecha" aria-hidden="true">↗</span>
+        </a>
+    </div>
+</section>
+
+<section class="seccion favoritas" aria-labelledby="favoritas-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="seccion-kicker">PARA EMPEZAR</span>
+            <h2 id="favoritas-titulo">Las primeras del menú.</h2>
+            <p>Descubrí los sabores y elegí el que se te antoje.</p>
+        </div>
+        <a class="enlace-flecha" asp-controller="Pizzas" asp-action="Index">Explorar todas <span aria-hidden="true">↗</span></a>
+    </div>
+    @if (Model.Count > 0)
+    {
+        <div class="grilla">
+            @foreach (var pizza in Model)
+            {
+                <partial name="_TarjetaPizza" model="pizza" />
+            }
+        </div>
+    }
+    else
+    {
+        <p class="vacio">Todavía no hay pizzas cargadas. Volvé a visitarnos pronto.</p>
+    }
+</section>
+
+<section class="seccion como-pedir" aria-labelledby="pasos-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="seccion-kicker">ASÍ DE SIMPLE</span>
+            <h2 id="pasos-titulo">Tu próxima pizza, en tres pasos.</h2>
+        </div>
+    </div>
+    <div class="pasos-grilla">
+        <div class="paso"><span class="paso-numero">01</span><span class="paso-icono" aria-hidden="true">◎</span><h3>Elegí tus pizzas</h3><p>Mirá el menú y seleccioná las variedades y cantidades que quieras.</p></div>
+        <div class="paso"><span class="paso-numero">02</span><span class="paso-icono" aria-hidden="true">✎</span><h3>Completá tus datos</h3><p>Ingresá tu nombre y los datos del pedido en el formulario.</p></div>
+        <div class="paso"><span class="paso-numero">03</span><span class="paso-icono" aria-hidden="true">✓</span><h3>Confirmá el pedido</h3><p>Revisá el detalle al confirmar y consultá los pedidos desde el menú.</p></div>
+    </div>
+</section>
+
+<section class="cta-final" aria-labelledby="cta-titulo">
+    <div>
+        <span class="seccion-kicker">LA MESA ESTÁ LISTA</span>
+        <h2 id="cta-titulo">¿Ya sabés cuál vas a pedir?</h2>
+        <p>Elegí tus favoritas y armá tu pedido.</p>
+    </div>
+    <div class="cta-acciones">
+        <a class="btn btn-claro" asp-controller="Pedidos" asp-action="Crear">Hacer un pedido <span aria-hidden="true">↗</span></a>
+        <a class="enlace-cta" asp-controller="Pedidos" asp-action="Index">Ver pedidos <span aria-hidden="true">→</span></a>
+    </div>
+</section>
