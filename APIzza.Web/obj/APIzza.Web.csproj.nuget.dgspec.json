@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/home/et12alumno/Descargas/APIzza-mvc/APIzza.Web/APIzza.Web.csproj": {}
+    "/home/et12alumno/Escritorio/APIzza-main/APIzza.Web/APIzza.Web.csproj": {}
   },
   "projects": {
-    "/home/et12alumno/Descargas/APIzza-mvc/APIzza.Web/APIzza.Web.csproj": {
+    "/home/et12alumno/Escritorio/APIzza-main/APIzza.Web/APIzza.Web.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/et12alumno/Descargas/APIzza-mvc/APIzza.Web/APIzza.Web.csproj",
+        "projectUniqueName": "/home/et12alumno/Escritorio/APIzza-main/APIzza.Web/APIzza.Web.csproj",
         "projectName": "APIzza.Web",
-        "projectPath": "/home/et12alumno/Descargas/APIzza-mvc/APIzza.Web/APIzza.Web.csproj",
+        "projectPath": "/home/et12alumno/Escritorio/APIzza-main/APIzza.Web/APIzza.Web.csproj",
         "packagesPath": "/home/et12alumno/.nuget/packages/",
-        "outputPath": "/home/et12alumno/Descargas/APIzza-mvc/APIzza.Web/obj/",
+        "outputPath": "/home/et12alumno/Escritorio/APIzza-main/APIzza.Web/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/et12alumno/.nuget/NuGet/NuGet.Config"
@@ -45,9 +45,9 @@
         "net10.0": {
           "targetAlias": "net10.0",
           "dependencies": {
-            "Microsoft.EntityFrameworkCore.Sqlite": {
+            "MySql.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[10.0.12, )"
+              "version": "[10.0.9, )"
             }
           },
           "imports": [

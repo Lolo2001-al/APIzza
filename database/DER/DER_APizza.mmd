@@ -1,0 +1,33 @@
+erDiagram
+    CLIENTES ||--o{ PEDIDOS : realiza
+    PEDIDOS ||--|{ ITEMS_PEDIDO : contiene
+    PIZZAS ||--o{ ITEMS_PEDIDO : incluye
+
+    CLIENTES {
+        int Id PK
+        varchar Nombre
+        varchar Email UK
+        varchar Telefono
+        varchar Direccion
+    }
+    PEDIDOS {
+        int Id PK
+        int ClienteId FK
+        varchar Estado
+        decimal Total
+        datetime CreadoEn
+    }
+    ITEMS_PEDIDO {
+        int Id PK
+        int PedidoId FK
+        int PizzaId FK
+        int Cantidad
+        decimal PrecioUnitario
+    }
+    PIZZAS {
+        int Id PK
+        varchar Nombre
+        varchar Descripcion
+        decimal Precio
+        varchar Categoria
+    }

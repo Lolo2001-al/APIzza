@@ -1,0 +1,53 @@
+digraph APizzaDER {
+  graph [label="DER - APIzza", labelloc=t, fontsize=24, rankdir=LR, splines=ortho, nodesep=0.7, ranksep=1.0];
+  node [shape=plain, fontname="Arial"];
+  edge [fontname="Arial", fontsize=10];
+
+  Clientes [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7">
+      <TR><TD BGCOLOR="#f2cc8f"><B>CLIENTES</B></TD></TR>
+      <TR><TD ALIGN="LEFT">🔑 Id : INT PK</TD></TR>
+      <TR><TD ALIGN="LEFT">Nombre : VARCHAR(120)</TD></TR>
+      <TR><TD ALIGN="LEFT">Email : VARCHAR(160) UNIQUE</TD></TR>
+      <TR><TD ALIGN="LEFT">Telefono : VARCHAR(40)</TD></TR>
+      <TR><TD ALIGN="LEFT">Direccion : VARCHAR(250)</TD></TR>
+    </TABLE>
+  >];
+
+  Pedidos [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7">
+      <TR><TD BGCOLOR="#f2cc8f"><B>PEDIDOS</B></TD></TR>
+      <TR><TD ALIGN="LEFT">🔑 Id : INT PK</TD></TR>
+      <TR><TD ALIGN="LEFT">ClienteId : INT FK</TD></TR>
+      <TR><TD ALIGN="LEFT">Estado : VARCHAR(30)</TD></TR>
+      <TR><TD ALIGN="LEFT">Total : DECIMAL(10,2)</TD></TR>
+      <TR><TD ALIGN="LEFT">CreadoEn : DATETIME(6)</TD></TR>
+    </TABLE>
+  >];
+
+  Items [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7">
+      <TR><TD BGCOLOR="#f2cc8f"><B>ITEMS_PEDIDO</B></TD></TR>
+      <TR><TD ALIGN="LEFT">🔑 Id : INT PK</TD></TR>
+      <TR><TD ALIGN="LEFT">PedidoId : INT FK</TD></TR>
+      <TR><TD ALIGN="LEFT">PizzaId : INT FK</TD></TR>
+      <TR><TD ALIGN="LEFT">Cantidad : INT</TD></TR>
+      <TR><TD ALIGN="LEFT">PrecioUnitario : DECIMAL(10,2)</TD></TR>
+    </TABLE>
+  >];
+
+  Pizzas [label=<
+    <TABLE BORDER="1" CELLBORDER="0" CELLSPACING="0" CELLPADDING="7">
+      <TR><TD BGCOLOR="#f2cc8f"><B>PIZZAS</B></TD></TR>
+      <TR><TD ALIGN="LEFT">🔑 Id : INT PK</TD></TR>
+      <TR><TD ALIGN="LEFT">Nombre : VARCHAR(120)</TD></TR>
+      <TR><TD ALIGN="LEFT">Descripcion : VARCHAR(500)</TD></TR>
+      <TR><TD ALIGN="LEFT">Precio : DECIMAL(10,2)</TD></TR>
+      <TR><TD ALIGN="LEFT">Categoria : VARCHAR(30)</TD></TR>
+    </TABLE>
+  >];
+
+  Clientes -> Pedidos [label="1 : N", arrowhead=none, taillabel="1", headlabel="N"];
+  Pedidos -> Items [label="1 : N", arrowhead=none, taillabel="1", headlabel="N"];
+  Pizzas -> Items [label="1 : N", arrowhead=none, taillabel="1", headlabel="N"];
+}

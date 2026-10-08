@@ -1,0 +1,25 @@
+CONEXIÓN MYSQL DE APIzza
+=========================
+
+1) Instalar MySQL Server 8.x o superior y dejar iniciado el servicio MySQL.
+2) En MySQL Workbench ejecutar, en este orden:
+   database/schema.sql
+   database/inserts.sql
+3) Abrir APIzza.Web/appsettings.json.
+4) Reemplazar CAMBIAR_ESTO por la contraseña de tu usuario root.
+
+Cadena completa preparada:
+Server=127.0.0.1;Port=3306;Database=apizza;User=root;Password=CAMBIAR_ESTO;SslMode=None;
+
+HOST MYSQL: 127.0.0.1
+HOST MYSQL EQUIVALENTE: localhost
+PUERTO: 3306
+BASE: apizza
+USUARIO: root
+
+IMPORTANTE:
+- 127.0.0.1/localhost es donde está MySQL en tu propia PC.
+- NO pongas aquí la URL de la página ASP.NET.
+- La página se ejecuta con dotnet run y muestra otra URL (por ejemplo http://localhost:5000).
+- Si MySQL usa otro puerto, cambiá Port=3306.
+- Si root tiene contraseña vacía, podés dejar Password=;

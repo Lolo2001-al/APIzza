@@ -233,3 +233,12 @@ main.contenedor { padding-top: 30px; padding-bottom: 90px; min-height: 70vh; }
   html { scroll-behavior: auto; }
   .btn, .categoria-card, .tarjeta, .tarjeta-banda img { transition: none; }
 }
+
+
+/* Alta de pizzas */
+.encabezado-menu { display:flex; align-items:center; justify-content:space-between; gap:20px; margin-bottom:24px; }
+.encabezado-menu .titulo { margin-bottom:0; }
+.formulario textarea, .formulario select { width:100%; padding:12px 14px; border:1px solid #d9d9d9; border-radius:10px; font:inherit; background:#fff; margin-bottom:10px; }
+.formulario textarea { resize:vertical; }
+.formulario select { cursor:pointer; }
+@media (max-width: 720px) { .encabezado-menu { align-items:flex-start; flex-direction:column; } }

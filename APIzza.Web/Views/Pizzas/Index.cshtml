@@ -4,7 +4,10 @@
     var sinFiltro = string.IsNullOrEmpty(Model.CategoriaActual);
 }
 
-<h1 class="titulo">Nuestro menú</h1>
+<div class="encabezado-menu">
+    <h1 class="titulo">Nuestro menú</h1>
+    <a class="btn" asp-action="Crear" asp-route-categoria="@Model.CategoriaActual">+ Agregar pizza</a>
+</div>
 
 <div class="filtros">
     <a class="@("filtro" + (sinFiltro ? " activo" : ""))" asp-action="Index">Todas</a>

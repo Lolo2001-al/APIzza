@@ -2,7 +2,7 @@ using APIzza.Web.Models;
 
 namespace APIzza.Web.Data;
 
-/// <summary>Crea la base (si no existe) y carga el menu de ejemplo.</summary>
+/// <summary>Garantiza que la base exista y agrega pizzas de ejemplo solo si el menú está vacío.</summary>
 public static class SeedData
 {
     public static void Inicializar(ApizzaDbContext contexto)

@@ -22,7 +22,7 @@ public async Task<IActionResult> Detalles(int id)
 
 | Parte | Qué es | Dónde está |
 |-------|--------|------------|
-| **Model** | Los datos y su estructura | `Models/` (Pizza, Cliente, Pedido, ItemPedido). `Data/ApizzaDbContext` los guarda en SQLite |
+| **Model** | Los datos y su estructura | `Models/` (Pizza, Cliente, Pedido, ItemPedido). `Data/ApizzaDbContext` los guarda en MySQL |
 | **View** | Lo que ve el usuario (HTML + Razor) | `Views/` (`.cshtml`) |
 | **Controller** | Recibe la petición, busca el Model y elige la vista | `Controllers/` |
 
@@ -68,13 +68,28 @@ return View(new MenuViewModel { Pizzas = ..., Categorias = ..., CategoriaActual 
 
 **Camino inverso (formulario → controlador):** en `Pedidos/Crear` el POST llega al controlador ya convertido en un `PedidoViewModel` (*model binding*), se valida con `ModelState.IsValid` (anotaciones `[Required]`, `[EmailAddress]`, `[Range]`) y, si todo está bien, se guarda y se redirige a `Detalles` (patrón Post/Redirect/Get, con `TempData` para el mensaje de confirmación).
 
-## 4. Qué se cambió respecto de la versión anterior (Web API)
+## 4. Base de datos MySQL y persistencia
+
+La aplicación usa Entity Framework Core con el proveedor oficial `MySql.EntityFrameworkCore`. La conexión está centralizada en `appsettings.json` y se registra en `Program.cs`.
+
+El modelo relacional tiene cuatro tablas:
+
+- `Pizzas`: catálogo del menú.
+- `Clientes`: datos del comprador.
+- `Pedidos`: cabecera del pedido.
+- `ItemsPedido`: detalle con pizza, cantidad y precio unitario.
+
+El flujo de un pedido es: formulario → `PedidoViewModel` → búsqueda/actualización de `Cliente` → creación de `Pedido` → creación de `ItemPedido` → `SaveChangesAsync()` → detalle del pedido.
+
+La carga de nuevas pizzas usa `PizzasController.Crear`, crea un registro en `Pizzas` y redirige a la categoría elegida.
+
+## 5. Qué se cambió respecto de la versión anterior (Web API)
 
 - El proyecto era una **API REST** que devolvía JSON y una landing aparte en JS con `fetch`. Ahora es **MVC con vistas Razor**: el servidor genera el HTML.
 - Se sacó lo que no pide esta entrega: Swagger, CORS, DTOs, y los endpoints PUT / DELETE / PATCH.
 - La integración con la API queda para el 4° bimestre.
 
-## 5. Preguntas que pueden hacer
+## 6. Preguntas que pueden hacer
 
 - **¿Qué pasa si no uso `await`?** Se obtiene un `Task` sin resolver y el código sigue sin esperar el resultado; los datos no están listos.
 - **¿Diferencia entre `Controller` y `ControllerBase`?** `Controller` agrega soporte para vistas (`View()`); `ControllerBase` es para APIs.
