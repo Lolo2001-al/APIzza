@@ -1,0 +1,108 @@
+@model ZapatillaFormViewModel
+
+<div class="columna">
+    <div asp-validation-summary="ModelOnly" class="error"></div>
+
+    <section class="caja">
+        <h2><span class="numero">1</span> Ficha</h2>
+
+        <div class="campos-2col">
+            <div class="campo">
+                <label asp-for="Nombre"></label>
+                <input asp-for="Nombre" type="text" placeholder="Air Jordan 1 Retro High OG" autocomplete="off" />
+                <span asp-validation-for="Nombre" class="error"></span>
+            </div>
+            <div class="campo">
+                <label asp-for="Colorway"></label>
+                <input asp-for="Colorway" type="text" placeholder="Chicago" autocomplete="off" />
+                <span asp-validation-for="Colorway" class="error"></span>
+            </div>
+        </div>
+
+        <div class="campos-2col">
+            <div class="campo">
+                <label asp-for="Categoria"></label>
+                <select asp-for="Categoria">
+                    @foreach (var categoria in Categorias.Todas)
+                    {
+                        <option value="@categoria">@Categorias.Nombre(categoria)</option>
+                    }
+                </select>
+                <span asp-validation-for="Categoria" class="error"></span>
+            </div>
+            <div class="campo">
+                <label asp-for="Precio"></label>
+                <input asp-for="Precio" type="number" min="1" step="1" placeholder="389999" />
+                <span class="campo-ayuda">En pesos, sin puntos ni centavos.</span>
+                <span asp-validation-for="Precio" class="error"></span>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label asp-for="Descripcion"></label>
+            <textarea asp-for="Descripcion" rows="4" placeholder="Materiales, historia del modelo, para qué sirve..."></textarea>
+            <span asp-validation-for="Descripcion" class="error"></span>
+        </div>
+    </section>
+
+    <section class="caja">
+        <h2><span class="numero">2</span> Stock por talle</h2>
+        <div class="stock-grilla">
+            @for (var i = 0; i < Model.Stock.Count; i++)
+            {
+                <div class="stock-celda">
+                    <input type="hidden" asp-for="Stock[i].Talle" />
+                    <label asp-for="Stock[i].Cantidad">@Model.Stock[i].TalleTexto</label>
+                    <input asp-for="Stock[i].Cantidad" type="number" min="0" max="999" data-stock-talle />
+                    <span asp-validation-for="Stock[i].Cantidad" class="error"></span>
+                </div>
+            }
+        </div>
+        <div class="stock-total">
+            <span>Total cargado</span>
+            <strong data-stock-total>@Formato.Pares(Model.StockTotal)</strong>
+        </div>
+    </section>
+</div>
+
+<div class="columna">
+    <section class="caja">
+        <h2><span class="numero">3</span> Publicación</h2>
+
+        <div class="campo">
+            <label asp-for="Imagen"></label>
+            <select asp-for="Imagen" data-vista-previa>
+                <option value="">Ilustración genérica</option>
+                @foreach (var ilustracion in ZapatillaImagen.Disponibles)
+                {
+                    <option value="@ilustracion.Archivo">@ilustracion.Nombre</option>
+                }
+            </select>
+            <span asp-validation-for="Imagen" class="error"></span>
+            <div class="vista-previa">
+                <img src="@Url.Content(ZapatillaImagen.Url(Model.Imagen))" alt="" data-imagen-previa data-base="@Url.Content("~/images/zapatillas/")" data-generica="@Url.Content(ZapatillaImagen.Generica)" />
+            </div>
+        </div>
+
+        <label class="casilla">
+            <input asp-for="Destacada" />
+            <span>Mostrar en la portada<small>Aparece en "Destacadas de la semana".</small></span>
+        </label>
+        <label class="casilla">
+            <input asp-for="Activa" />
+            <span>Publicada en el catálogo<small>Si se desmarca, queda pausada: no se muestra ni se vende.</small></span>
+        </label>
+    </section>
+
+    <div class="formulario-acciones">
+        <button type="submit" class="btn">@(Model.EsEdicion ? "Guardar cambios" : "Publicar modelo")</button>
+        @if (Model.EsEdicion)
+        {
+            <a class="btn btn-fantasma" asp-action="Detalles" asp-route-id="@Model.Id">Cancelar</a>
+        }
+        else
+        {
+            <a class="btn btn-fantasma" asp-action="Index">Cancelar</a>
+        }
+    </div>
+</div>

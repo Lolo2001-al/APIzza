@@ -1,0 +1,143 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1960" height="1060" viewBox="0 0 1960 1060" font-family="Helvetica, Arial, sans-serif">
+<rect width="1960" height="1060" fill="#f6f6f3"/>
+<rect x="84" y="156" width="470" height="398" rx="12" fill="#e6e6e1"/>
+<rect x="80" y="150" width="470" height="398" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
+<path d="M80 198 V162 a12 12 0 0 1 12 -12 H538 a12 12 0 0 1 12 12 V198 Z" fill="#111111"/>
+<text x="96" y="183" font-size="24" font-weight="700" fill="#fff">Zapatillas</text>
+<text x="96" y="226" font-size="19" fill="#111">Id</text>
+<text x="310" y="225" font-size="16" fill="#4f4f4f">INT PK</text>
+<line x1="92" y1="236" x2="538" y2="236" stroke="#eeeeea"/>
+<text x="96" y="260" font-size="19" fill="#111">Nombre</text>
+<text x="310" y="259" font-size="16" fill="#4f4f4f">VARCHAR(120)</text>
+<line x1="92" y1="270" x2="538" y2="270" stroke="#eeeeea"/>
+<text x="96" y="294" font-size="19" fill="#111">Colorway</text>
+<text x="310" y="293" font-size="16" fill="#4f4f4f">VARCHAR(80)</text>
+<line x1="92" y1="304" x2="538" y2="304" stroke="#eeeeea"/>
+<text x="96" y="328" font-size="19" fill="#111">Descripcion</text>
+<text x="310" y="327" font-size="16" fill="#4f4f4f">VARCHAR(600)</text>
+<line x1="92" y1="338" x2="538" y2="338" stroke="#eeeeea"/>
+<text x="96" y="362" font-size="19" fill="#111">Precio</text>
+<text x="310" y="361" font-size="16" fill="#4f4f4f">DECIMAL(10,2)</text>
+<line x1="92" y1="372" x2="538" y2="372" stroke="#eeeeea"/>
+<text x="96" y="396" font-size="19" fill="#111">Categoria</text>
+<text x="310" y="395" font-size="16" fill="#4f4f4f">VARCHAR(30)</text>
+<line x1="92" y1="406" x2="538" y2="406" stroke="#eeeeea"/>
+<text x="96" y="430" font-size="19" fill="#111">Imagen</text>
+<text x="310" y="429" font-size="16" fill="#4f4f4f">VARCHAR(120)</text>
+<line x1="92" y1="440" x2="538" y2="440" stroke="#eeeeea"/>
+<text x="96" y="464" font-size="19" fill="#111">Destacada</text>
+<text x="310" y="463" font-size="16" fill="#4f4f4f">TINYINT(1)</text>
+<line x1="92" y1="474" x2="538" y2="474" stroke="#eeeeea"/>
+<text x="96" y="498" font-size="19" fill="#111">Activa</text>
+<text x="310" y="497" font-size="16" fill="#4f4f4f">TINYINT(1)</text>
+<line x1="92" y1="508" x2="538" y2="508" stroke="#eeeeea"/>
+<text x="96" y="532" font-size="19" fill="#111">CreadoEn</text>
+<text x="310" y="531" font-size="16" fill="#4f4f4f">DATETIME(6)</text>
+<rect x="84" y="726" width="470" height="228" rx="12" fill="#e6e6e1"/>
+<rect x="80" y="720" width="470" height="228" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
+<path d="M80 768 V732 a12 12 0 0 1 12 -12 H538 a12 12 0 0 1 12 12 V768 Z" fill="#d7262c"/>
+<text x="96" y="753" font-size="24" font-weight="700" fill="#fff">StockTalles</text>
+<text x="96" y="796" font-size="19" fill="#111">Id</text>
+<text x="310" y="795" font-size="16" fill="#4f4f4f">INT PK</text>
+<line x1="92" y1="806" x2="538" y2="806" stroke="#eeeeea"/>
+<text x="96" y="830" font-size="19" fill="#111">ZapatillaId</text>
+<text x="310" y="829" font-size="16" fill="#4f4f4f">INT FK</text>
+<line x1="92" y1="840" x2="538" y2="840" stroke="#eeeeea"/>
+<text x="96" y="864" font-size="19" fill="#111">Talle</text>
+<text x="310" y="863" font-size="16" fill="#4f4f4f">DECIMAL(3,1)</text>
+<line x1="92" y1="874" x2="538" y2="874" stroke="#eeeeea"/>
+<text x="96" y="898" font-size="19" fill="#111">Cantidad</text>
+<text x="310" y="897" font-size="16" fill="#4f4f4f">INT  CHECK &gt;= 0</text>
+<line x1="92" y1="908" x2="538" y2="908" stroke="#eeeeea"/>
+<text x="96" y="932" font-size="19" fill="#111">UNIQUE</text>
+<text x="310" y="931" font-size="16" fill="#4f4f4f">(ZapatillaId, Talle)</text>
+<rect x="704" y="486" width="470" height="262" rx="12" fill="#e6e6e1"/>
+<rect x="700" y="480" width="470" height="262" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
+<path d="M700 528 V492 a12 12 0 0 1 12 -12 H1158 a12 12 0 0 1 12 12 V528 Z" fill="#111111"/>
+<text x="716" y="513" font-size="24" font-weight="700" fill="#fff">ItemsPedido</text>
+<text x="716" y="556" font-size="19" fill="#111">Id</text>
+<text x="930" y="555" font-size="16" fill="#4f4f4f">INT PK</text>
+<line x1="712" y1="566" x2="1158" y2="566" stroke="#eeeeea"/>
+<text x="716" y="590" font-size="19" fill="#111">PedidoId</text>
+<text x="930" y="589" font-size="16" fill="#4f4f4f">INT FK</text>
+<line x1="712" y1="600" x2="1158" y2="600" stroke="#eeeeea"/>
+<text x="716" y="624" font-size="19" fill="#111">ZapatillaId</text>
+<text x="930" y="623" font-size="16" fill="#4f4f4f">INT FK</text>
+<line x1="712" y1="634" x2="1158" y2="634" stroke="#eeeeea"/>
+<text x="716" y="658" font-size="19" fill="#111">Talle</text>
+<text x="930" y="657" font-size="16" fill="#4f4f4f">DECIMAL(3,1)</text>
+<line x1="712" y1="668" x2="1158" y2="668" stroke="#eeeeea"/>
+<text x="716" y="692" font-size="19" fill="#111">Cantidad</text>
+<text x="930" y="691" font-size="16" fill="#4f4f4f">INT  CHECK &gt; 0</text>
+<line x1="712" y1="702" x2="1158" y2="702" stroke="#eeeeea"/>
+<text x="716" y="726" font-size="19" fill="#111">PrecioUnitario</text>
+<text x="930" y="725" font-size="16" fill="#4f4f4f">DECIMAL(10,2)</text>
+<rect x="1414" y="426" width="470" height="296" rx="12" fill="#e6e6e1"/>
+<rect x="1410" y="420" width="470" height="296" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
+<path d="M1410 468 V432 a12 12 0 0 1 12 -12 H1868 a12 12 0 0 1 12 12 V468 Z" fill="#111111"/>
+<text x="1426" y="453" font-size="24" font-weight="700" fill="#fff">Pedidos</text>
+<text x="1426" y="496" font-size="19" fill="#111">Id</text>
+<text x="1640" y="495" font-size="16" fill="#4f4f4f">INT PK</text>
+<line x1="1422" y1="506" x2="1868" y2="506" stroke="#eeeeea"/>
+<text x="1426" y="530" font-size="19" fill="#111">ClienteId</text>
+<text x="1640" y="529" font-size="16" fill="#4f4f4f">INT FK</text>
+<line x1="1422" y1="540" x2="1868" y2="540" stroke="#eeeeea"/>
+<text x="1426" y="564" font-size="19" fill="#111">Estado</text>
+<text x="1640" y="563" font-size="16" fill="#4f4f4f">VARCHAR(30)</text>
+<line x1="1422" y1="574" x2="1868" y2="574" stroke="#eeeeea"/>
+<text x="1426" y="598" font-size="19" fill="#111">Total</text>
+<text x="1640" y="597" font-size="16" fill="#4f4f4f">DECIMAL(10,2)</text>
+<line x1="1422" y1="608" x2="1868" y2="608" stroke="#eeeeea"/>
+<text x="1426" y="632" font-size="19" fill="#111">Nota</text>
+<text x="1640" y="631" font-size="16" fill="#4f4f4f">VARCHAR(300)</text>
+<line x1="1422" y1="642" x2="1868" y2="642" stroke="#eeeeea"/>
+<text x="1426" y="666" font-size="19" fill="#111">CreadoEn</text>
+<text x="1640" y="665" font-size="16" fill="#4f4f4f">DATETIME(6)</text>
+<line x1="1422" y1="676" x2="1868" y2="676" stroke="#eeeeea"/>
+<text x="1426" y="700" font-size="19" fill="#111">ActualizadoEn</text>
+<text x="1640" y="699" font-size="16" fill="#4f4f4f">DATETIME(6)</text>
+<rect x="1414" y="96" width="470" height="262" rx="12" fill="#e6e6e1"/>
+<rect x="1410" y="90" width="470" height="262" rx="12" fill="#fff" stroke="#111" stroke-width="2"/>
+<path d="M1410 138 V102 a12 12 0 0 1 12 -12 H1868 a12 12 0 0 1 12 12 V138 Z" fill="#111111"/>
+<text x="1426" y="123" font-size="24" font-weight="700" fill="#fff">Clientes</text>
+<text x="1426" y="166" font-size="19" fill="#111">Id</text>
+<text x="1640" y="165" font-size="16" fill="#4f4f4f">INT PK</text>
+<line x1="1422" y1="176" x2="1868" y2="176" stroke="#eeeeea"/>
+<text x="1426" y="200" font-size="19" fill="#111">Nombre</text>
+<text x="1640" y="199" font-size="16" fill="#4f4f4f">VARCHAR(120)</text>
+<line x1="1422" y1="210" x2="1868" y2="210" stroke="#eeeeea"/>
+<text x="1426" y="234" font-size="19" fill="#111">Email</text>
+<text x="1640" y="233" font-size="16" fill="#4f4f4f">VARCHAR(160) UNIQUE</text>
+<line x1="1422" y1="244" x2="1868" y2="244" stroke="#eeeeea"/>
+<text x="1426" y="268" font-size="19" fill="#111">Telefono</text>
+<text x="1640" y="267" font-size="16" fill="#4f4f4f">VARCHAR(40)</text>
+<line x1="1422" y1="278" x2="1868" y2="278" stroke="#eeeeea"/>
+<text x="1426" y="302" font-size="19" fill="#111">Direccion</text>
+<text x="1640" y="301" font-size="16" fill="#4f4f4f">VARCHAR(250)</text>
+<line x1="1422" y1="312" x2="1868" y2="312" stroke="#eeeeea"/>
+<text x="1426" y="336" font-size="19" fill="#111">CreadoEn</text>
+<text x="1640" y="335" font-size="16" fill="#4f4f4f">DATETIME(6)</text>
+<polyline points="315,548 315,720" fill="none" stroke="#4f4f4f" stroke-width="3"/>
+<path d="M315 720 L301 698 M315 720 L329 698 M301 690 H329" stroke="#4f4f4f" stroke-width="3" fill="none"/>
+<line x1="303" y1="558" x2="327" y2="558" stroke="#4f4f4f" stroke-width="3"/>
+<rect x="323" y="616" width="310" height="30" rx="8" fill="#f6f6f3" stroke="#e6e6e1"/>
+<text x="331" y="639" font-size="15" fill="#111">1 : N   tiene stock por talle  (CASCADE)</text>
+<polyline points="550,284 630,284 630,614 700,614" fill="none" stroke="#4f4f4f" stroke-width="3"/>
+<path d="M700 614 L678 600 M700 614 L678 628 M670 600 V628" stroke="#4f4f4f" stroke-width="3" fill="none"/>
+<line x1="560" y1="272" x2="560" y2="296" stroke="#4f4f4f" stroke-width="3"/>
+<rect x="642" y="324" width="253" height="30" rx="8" fill="#f6f6f3" stroke="#e6e6e1"/>
+<text x="650" y="347" font-size="15" fill="#111">1 : N   se vende en  (RESTRICT)</text>
+<polyline points="1645,352 1645,420" fill="none" stroke="#4f4f4f" stroke-width="3"/>
+<path d="M1645 420 L1631 398 M1645 420 L1659 398 M1631 390 H1659" stroke="#4f4f4f" stroke-width="3" fill="none"/>
+<line x1="1633" y1="362" x2="1657" y2="362" stroke="#4f4f4f" stroke-width="3"/>
+<rect x="1653" y="368" width="209" height="30" rx="8" fill="#f6f6f3" stroke="#e6e6e1"/>
+<text x="1661" y="391" font-size="15" fill="#111">1 : N   realiza  (RESTRICT)</text>
+<polyline points="1410,486 1290,486 1290,580 1170,580" fill="none" stroke="#4f4f4f" stroke-width="3"/>
+<path d="M1170 580 L1192 566 M1170 580 L1192 594 M1200 566 V594" stroke="#4f4f4f" stroke-width="3" fill="none"/>
+<line x1="1400" y1="474" x2="1400" y2="498" stroke="#4f4f4f" stroke-width="3"/>
+<rect x="1176" y="596" width="225" height="30" rx="8" fill="#f6f6f3" stroke="#e6e6e1"/>
+<text x="1184" y="619" font-size="15" fill="#111">1 : N   contiene  (CASCADE)</text>
+<text x="80" y="72" font-size="34" font-weight="700" fill="#111">APIr Jordan — Diagrama Entidad-Relación (MySQL)</text>
+<text x="80" y="106" font-size="16" fill="#4f4f4f">5 tablas · el stock se controla por talle en StockTalles · ItemsPedido guarda talle y precio históricos · Email único en Clientes</text>
+<text x="700" y="1016" font-size="16" fill="#4f4f4f">Pedidos.Estado: pendiente → pagado → enviado → entregado  |  cancelado (repone el stock)</text>
+</svg>

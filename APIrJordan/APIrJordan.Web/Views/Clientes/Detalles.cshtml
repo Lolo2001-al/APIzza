@@ -1,0 +1,67 @@
+@model Cliente
+@{
+    ViewData["Title"] = Model.Nombre;
+    var pedidos = Model.Pedidos.OrderByDescending(p => p.CreadoEn).ToList();
+    var validos = pedidos.Where(p => !p.Cancelado).ToList();
+}
+
+<nav class="migas" aria-label="Migas de pan">
+    <a asp-action="Index">Clientes</a>
+    <span aria-hidden="true">/</span>
+    <span>@Model.Nombre</span>
+</nav>
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Cliente desde @Formato.Fecha(Model.CreadoEn)</span>
+        <h1>@Model.Nombre</h1>
+        <p>@Model.Email · @(string.IsNullOrEmpty(Model.Telefono) ? Model.Direccion : Model.Telefono + " · " + Model.Direccion)</p>
+    </div>
+</div>
+
+<div class="kpis">
+    <div class="kpi"><span class="kpi-etiqueta">Pedidos</span><div class="kpi-valor">@validos.Count</div><div class="kpi-detalle">@(pedidos.Count - validos.Count) cancelados</div></div>
+    <div class="kpi"><span class="kpi-etiqueta">Pares comprados</span><div class="kpi-valor">@validos.Sum(p => p.CantidadPares)</div></div>
+    <div class="kpi"><span class="kpi-etiqueta">Total comprado</span><div class="kpi-valor">@Formato.Pesos(validos.Sum(p => p.Total))</div></div>
+    <div class="kpi"><span class="kpi-etiqueta">Último pedido</span><div class="kpi-valor">@(pedidos.Count == 0 ? "—" : Formato.Relativo(pedidos[0].CreadoEn))</div></div>
+</div>
+
+@if (pedidos.Count == 0)
+{
+    <div class="vacio"><strong>Todavía no tiene pedidos.</strong></div>
+}
+else
+{
+    <div class="tabla-scroll">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Fecha</th>
+                    <th>Contenido</th>
+                    <th>Estado</th>
+                    <th class="num">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pedido in pedidos)
+                {
+                    <tr>
+                        <td><a class="fila-enlace" asp-controller="Pedidos" asp-action="Detalles" asp-route-id="@pedido.Id">#@pedido.Id</a></td>
+                        <td>@Formato.FechaHora(pedido.CreadoEn)</td>
+                        <td>
+                            @foreach (var item in pedido.Items)
+                            {
+                                <div>@(item.Zapatilla?.NombreCompleto ?? "Modelo") <span class="silencio">· talle @item.TalleTexto × @item.Cantidad</span></div>
+                            }
+                        </td>
+                        <td><partial name="_Estado" model="pedido.Estado" /></td>
+                        <td class="num precio">@Formato.Pesos(pedido.Total)</td>
+                        <td><a class="enlace" asp-controller="Pedidos" asp-action="Detalles" asp-route-id="@pedido.Id">Ver</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

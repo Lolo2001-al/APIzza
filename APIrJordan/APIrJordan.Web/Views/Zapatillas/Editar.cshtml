@@ -1,0 +1,19 @@
+@model ZapatillaFormViewModel
+@{
+    ViewData["Title"] = "Editar " + Model.Nombre;
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Catálogo</span>
+        <h1>Editar @Model.Nombre</h1>
+        <p>Actualizá precio, descripción o stock. Los pedidos ya hechos conservan el precio con el que se compraron.</p>
+    </div>
+    <div class="acciones">
+        <a class="btn btn-fantasma" asp-action="Detalles" asp-route-id="@Model.Id">Ver ficha</a>
+    </div>
+</div>
+
+<form asp-action="Editar" asp-route-id="@Model.Id" method="post" class="formulario formulario-ancho">
+    <partial name="_CamposZapatilla" model="Model" />
+</form>

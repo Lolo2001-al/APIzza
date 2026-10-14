@@ -1,0 +1,67 @@
+@model ClientesIndexViewModel
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Gestión</span>
+        <h1>Clientes</h1>
+        <p>Cada persona se identifica por su email: si vuelve a comprar, se reutiliza el mismo cliente.</p>
+    </div>
+</div>
+
+<form method="get" asp-action="Index" class="filtros" role="search">
+    <div class="filtros-fila">
+        <label class="campo-busqueda">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <input type="search" name="q" value="@Model.Busqueda" placeholder="Buscar por nombre o email" aria-label="Buscar clientes" />
+        </label>
+        <button type="submit" class="btn btn-chico">Buscar</button>
+        @if (!string.IsNullOrWhiteSpace(Model.Busqueda))
+        {
+            <a class="btn btn-fantasma btn-chico" asp-action="Index">Limpiar</a>
+        }
+    </div>
+</form>
+
+@if (Model.Clientes.Count == 0)
+{
+    <div class="vacio">
+        <strong>No hay clientes para mostrar.</strong>
+        Los clientes se crean solos al confirmar la primera compra.
+    </div>
+}
+else
+{
+    <div class="tabla-scroll">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Cliente</th>
+                    <th>Entrega</th>
+                    <th class="num">Pedidos</th>
+                    <th class="num">Total comprado</th>
+                    <th>Último pedido</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var fila in Model.Clientes)
+                {
+                    <tr>
+                        <td>
+                            <a class="fila-enlace" asp-action="Detalles" asp-route-id="@fila.Cliente.Id">@fila.Cliente.Nombre</a>
+                            <div class="silencio">@fila.Cliente.Email</div>
+                        </td>
+                        <td>@fila.Cliente.Direccion</td>
+                        <td class="num">@fila.CantidadPedidos</td>
+                        <td class="num precio">@Formato.Pesos(fila.TotalGastado)</td>
+                        <td>@(fila.UltimoPedido.HasValue ? Formato.Fecha(fila.UltimoPedido.Value) : "—")</td>
+                        <td><a class="enlace" asp-action="Detalles" asp-route-id="@fila.Cliente.Id">Ver</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

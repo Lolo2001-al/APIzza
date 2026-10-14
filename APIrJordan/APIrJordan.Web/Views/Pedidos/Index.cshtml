@@ -1,0 +1,87 @@
+@model PedidosIndexViewModel
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Gestión</span>
+        <h1>Pedidos</h1>
+        <p>@Model.Total en total · @Model.Conteo(EstadoPedido.Pendiente) pendientes de pago · @Model.Conteo(EstadoPedido.Pagado) para enviar.</p>
+    </div>
+</div>
+
+<form method="get" asp-action="Index" class="filtros" role="search">
+    <div class="pestanas" aria-label="Estados">
+        <a class="pestana @(Model.Estado == null ? "activa" : null)" asp-action="Index" asp-route-q="@Model.Busqueda">Todos <small>@Model.Total</small></a>
+        @foreach (var estado in EstadoPedido.Todos)
+        {
+            <a class="pestana @(Model.Estado == estado ? "activa" : null)" asp-action="Index" asp-route-estado="@estado" asp-route-q="@Model.Busqueda">@EstadoPedido.Nombre(estado) <small>@Model.Conteo(estado)</small></a>
+        }
+    </div>
+    <div class="filtros-fila">
+        @if (Model.Estado != null)
+        {
+            <input type="hidden" name="estado" value="@Model.Estado" />
+        }
+        <label class="campo-busqueda">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <input type="search" name="q" value="@Model.Busqueda" placeholder="Buscar por cliente, email o número de pedido" aria-label="Buscar pedidos" />
+        </label>
+        <button type="submit" class="btn btn-chico">Buscar</button>
+        @if (!string.IsNullOrWhiteSpace(Model.Busqueda))
+        {
+            <a class="btn btn-fantasma btn-chico" asp-action="Index" asp-route-estado="@Model.Estado">Limpiar</a>
+        }
+    </div>
+</form>
+
+@if (Model.Pedidos.Count == 0)
+{
+    <div class="vacio">
+        <strong>No hay pedidos para mostrar.</strong>
+        @if (Model.Estado != null || !string.IsNullOrWhiteSpace(Model.Busqueda))
+        {
+            <text>Probá con otro estado o limpiá la búsqueda.</text>
+        }
+        else
+        {
+            <text>Cuando alguien confirme una compra va a aparecer acá.</text>
+        }
+    </div>
+}
+else
+{
+    <div class="tabla-scroll">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Pedido</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th class="num">Pares</th>
+                    <th>Estado</th>
+                    <th class="num">Total</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var pedido in Model.Pedidos)
+                {
+                    <tr>
+                        <td><a class="fila-enlace" asp-action="Detalles" asp-route-id="@pedido.Id">#@pedido.Id</a></td>
+                        <td>@Formato.FechaHora(pedido.CreadoEn) <span class="silencio">· @Formato.Relativo(pedido.CreadoEn)</span></td>
+                        <td>
+                            @pedido.Cliente?.Nombre
+                            <div class="silencio">@pedido.Cliente?.Email</div>
+                        </td>
+                        <td class="num">@pedido.CantidadPares</td>
+                        <td><partial name="_Estado" model="pedido.Estado" /></td>
+                        <td class="num precio">@Formato.Pesos(pedido.Total)</td>
+                        <td><a class="enlace" asp-action="Detalles" asp-route-id="@pedido.Id">Ver</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

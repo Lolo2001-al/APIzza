@@ -1,0 +1,120 @@
+@model CatalogoViewModel
+@{
+    ViewData["Title"] = Model.Categoria == null ? "Catálogo" : Categorias.Nombre(Model.Categoria);
+    var talleTexto = Model.Talle.HasValue ? Talles.Formatear(Model.Talle.Value) : null;
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Catálogo</span>
+        <h1>@(Model.Categoria == null ? "Todos los modelos" : Categorias.Nombre(Model.Categoria))</h1>
+        <p>@(Model.Categoria == null ? "Retro, lifestyle y básquet, con el stock de cada talle al día." : Categorias.Descripcion(Model.Categoria))</p>
+    </div>
+    <div class="acciones">
+        <a class="btn btn-fantasma" asp-action="Crear">+ Cargar modelo</a>
+    </div>
+</div>
+
+<form method="get" asp-action="Index" class="filtros" role="search">
+    <div class="pestanas" aria-label="Categorías">
+        <a class="pestana @(Model.Categoria == null ? "activa" : null)" asp-action="Index" asp-route-talle="@talleTexto" asp-route-q="@Model.Busqueda" asp-route-orden="@Model.Orden">
+            Todas <small>@Model.ConteoPorCategoria.Values.Sum()</small>
+        </a>
+        @foreach (var categoria in Categorias.Todas)
+        {
+            <a class="pestana @(Model.Categoria == categoria ? "activa" : null)" asp-action="Index" asp-route-categoria="@categoria" asp-route-talle="@talleTexto" asp-route-q="@Model.Busqueda" asp-route-orden="@Model.Orden">
+                @Categorias.Nombre(categoria) <small>@(Model.ConteoPorCategoria.TryGetValue(categoria, out var cantidad) ? cantidad : 0)</small>
+            </a>
+        }
+    </div>
+
+    <div class="filtros-fila">
+        @if (Model.Categoria != null)
+        {
+            <input type="hidden" name="categoria" value="@Model.Categoria" />
+        }
+        <label class="campo-busqueda">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <input type="search" name="q" value="@Model.Busqueda" placeholder="Buscar por modelo o colorway" aria-label="Buscar" />
+        </label>
+        <select class="selector" name="talle" aria-label="Filtrar por talle">
+            <option value="">Todos los talles</option>
+            @foreach (var talle in Talles.Todos)
+            {
+                <option value="@Talles.Formatear(talle)" selected="@(Model.Talle == talle)">Talle @Talles.Formatear(talle)</option>
+            }
+        </select>
+        <select class="selector" name="orden" aria-label="Ordenar">
+            @foreach (var orden in CatalogoViewModel.Ordenes)
+            {
+                <option value="@orden.Valor" selected="@(Model.Orden == orden.Valor)">@orden.Texto</option>
+            }
+        </select>
+        <button type="submit" class="btn btn-chico">Aplicar</button>
+        @if (Model.HayFiltros)
+        {
+            <a class="btn btn-fantasma btn-chico" asp-action="Index">Limpiar</a>
+        }
+    </div>
+</form>
+
+<div class="resultado-conteo">
+    <span>
+        @(Model.TotalResultados == 1 ? "1 modelo" : Model.TotalResultados + " modelos")@(Model.HayFiltros ? " con estos filtros" : "")
+        @if (Model.TotalPaginas > 1)
+        {
+            <text>· página @Model.Pagina de @Model.TotalPaginas</text>
+        }
+    </span>
+    @if (Model.HayFiltros)
+    {
+        <span class="chips-activos">
+            @if (Model.Talle != null)
+            {
+                <span class="chip-activo">Talle @talleTexto <a asp-action="Index" asp-route-categoria="@Model.Categoria" asp-route-q="@Model.Busqueda" asp-route-orden="@Model.Orden" aria-label="Quitar filtro de talle">×</a></span>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Busqueda))
+            {
+                <span class="chip-activo">“@Model.Busqueda” <a asp-action="Index" asp-route-categoria="@Model.Categoria" asp-route-talle="@talleTexto" asp-route-orden="@Model.Orden" aria-label="Quitar búsqueda">×</a></span>
+            }
+        </span>
+    }
+</div>
+
+@if (Model.Zapatillas.Count == 0)
+{
+    <div class="vacio">
+        <strong>No encontramos modelos con esos filtros.</strong>
+        Probá con otro talle o limpiá la búsqueda.
+        <br />
+        <a class="btn" asp-action="Index">Ver todo el catálogo</a>
+    </div>
+}
+else
+{
+    <div class="grilla">
+        @foreach (var zapatilla in Model.Zapatillas)
+        {
+            <partial name="_TarjetaZapatilla" model="zapatilla" />
+        }
+    </div>
+}
+
+@if (Model.TotalPaginas > 1)
+{
+    <nav class="paginacion" aria-label="Paginación">
+        <a class="@(Model.Pagina == 1 ? "deshabilitado" : null)" asp-action="Index" asp-route-categoria="@Model.Categoria" asp-route-talle="@talleTexto" asp-route-q="@Model.Busqueda" asp-route-orden="@Model.Orden" asp-route-pagina="@(Model.Pagina - 1)" aria-label="Página anterior">←</a>
+        @for (var p = 1; p <= Model.TotalPaginas; p++)
+        {
+            if (p == Model.Pagina)
+            {
+                <span class="actual" aria-current="page">@p</span>
+            }
+            else
+            {
+                <a asp-action="Index" asp-route-categoria="@Model.Categoria" asp-route-talle="@talleTexto" asp-route-q="@Model.Busqueda" asp-route-orden="@Model.Orden" asp-route-pagina="@p">@p</a>
+            }
+        }
+        <a class="@(Model.Pagina == Model.TotalPaginas ? "deshabilitado" : null)" asp-action="Index" asp-route-categoria="@Model.Categoria" asp-route-talle="@talleTexto" asp-route-q="@Model.Busqueda" asp-route-orden="@Model.Orden" asp-route-pagina="@(Model.Pagina + 1)" aria-label="Página siguiente">→</a>
+    </nav>
+}

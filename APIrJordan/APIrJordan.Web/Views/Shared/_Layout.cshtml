@@ -1,0 +1,100 @@
+@inject CarritoService Carrito
+@{
+    var controladorActual = ViewContext.RouteData.Values["controller"]?.ToString();
+    var enCarrito = Carrito.CantidadTotal();
+}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] | APIr Jordan</title>
+    <meta name="description" content="APIr Jordan: catálogo de zapatillas Jordan con stock por talle, carrito y seguimiento de pedidos." />
+    <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="~/fonts/inter-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="~/fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <a class="saltar" href="#contenido">Saltar al contenido</a>
+
+    <header class="barra">
+        <div class="contenedor barra-contenido">
+            <a class="logo" asp-controller="Home" asp-action="Index" aria-label="APIr Jordan, volver al inicio">
+                APIr<span>Jordan</span><i aria-hidden="true"></i>
+            </a>
+
+            <nav class="navegacion" aria-label="Navegación principal">
+                <a asp-controller="Zapatillas" asp-action="Index" class="@(controladorActual == "Zapatillas" ? "activo" : null)">Catálogo</a>
+                <a asp-controller="Pedidos" asp-action="Index" class="@(controladorActual == "Pedidos" ? "activo" : null)">Pedidos</a>
+                <a asp-controller="Clientes" asp-action="Index" class="@(controladorActual == "Clientes" ? "activo" : null)">Clientes</a>
+                <a asp-controller="Panel" asp-action="Index" class="@(controladorActual == "Panel" ? "activo" : null)">Panel</a>
+            </nav>
+
+            <div class="barra-acciones">
+                <a class="btn btn-fantasma btn-chico" asp-controller="Zapatillas" asp-action="Crear">+ Modelo</a>
+                <a class="carrito-boton @(controladorActual == "Carrito" ? "activo" : null)" asp-controller="Carrito" asp-action="Index" aria-label="Carrito, @enCarrito pares">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M6 7h12l1 13H5L6 7z" />
+                        <path d="M9 7a3 3 0 0 1 6 0" />
+                    </svg>
+                    <span class="carrito-contador @(enCarrito == 0 ? "vacio" : null)" data-contador-carrito>@enCarrito</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="avisos" aria-live="polite">
+        @if (TempData["Mensaje"] is string mensaje)
+        {
+            <div class="aviso" role="status" data-aviso>
+                <span class="aviso-icono" aria-hidden="true">✓</span>
+                <span>@mensaje</span>
+                <button type="button" class="aviso-cerrar" aria-label="Cerrar" data-cerrar-aviso>×</button>
+            </div>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <div class="aviso aviso-error" role="alert" data-aviso>
+                <span class="aviso-icono" aria-hidden="true">!</span>
+                <span>@error</span>
+                <button type="button" class="aviso-cerrar" aria-label="Cerrar" data-cerrar-aviso>×</button>
+            </div>
+        }
+    </div>
+
+    <main id="contenido" class="contenedor pagina">
+        @RenderBody()
+    </main>
+
+    <footer class="pie">
+        <div class="contenedor pie-contenido">
+            <div class="pie-marca">
+                <a class="logo" asp-controller="Home" asp-action="Index">APIr<span>Jordan</span><i aria-hidden="true"></i></a>
+                <p>Zapatillas Jordan con stock real por talle. Proyecto educativo, sin fines comerciales.</p>
+            </div>
+            <div class="pie-columna">
+                <span class="pie-titulo">Tienda</span>
+                <a asp-controller="Zapatillas" asp-action="Index">Catálogo</a>
+                <a asp-controller="Zapatillas" asp-action="Index" asp-route-categoria="retro">Retro</a>
+                <a asp-controller="Zapatillas" asp-action="Index" asp-route-categoria="lifestyle">Lifestyle</a>
+                <a asp-controller="Zapatillas" asp-action="Index" asp-route-categoria="basquet">Básquet</a>
+            </div>
+            <div class="pie-columna">
+                <span class="pie-titulo">Gestión</span>
+                <a asp-controller="Pedidos" asp-action="Index">Pedidos</a>
+                <a asp-controller="Clientes" asp-action="Index">Clientes</a>
+                <a asp-controller="Panel" asp-action="Index">Panel</a>
+                <a asp-controller="Zapatillas" asp-action="Crear">Cargar modelo</a>
+            </div>
+        </div>
+        <div class="contenedor pie-base">
+            <span>© @DateTime.Now.Year APIr Jordan · ASP.NET Core MVC + EF Core + MySQL</span>
+            <span>Jordan y Air Jordan son marcas de sus respectivos dueños.</span>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,36 @@
+@model Pedido
+@{
+    ViewData["Title"] = "Pedido confirmado";
+}
+
+<div class="confirmacion">
+    <div class="confirmacion-check" aria-hidden="true">
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6.5" /></svg>
+    </div>
+    <span class="kicker" style="justify-content:center">Pedido #@Model.Id</span>
+    <h1>¡Listo, @(Model.Cliente?.Nombre)!</h1>
+    <p>Registramos tu pedido de @Formato.Pares(Model.CantidadPares) por @Formato.Pesos(Model.Total). Queda <strong>pendiente</strong> hasta que se acredite el pago; después lo preparamos y lo enviamos a <strong>@Model.Cliente?.Direccion</strong>.</p>
+
+    <section class="caja">
+        <h2>Detalle</h2>
+        <div class="resumen-lineas">
+            @foreach (var item in Model.Items)
+            {
+                <div class="resumen-linea">
+                    <span class="linea-imagen"><img src="@Url.Content(ZapatillaImagen.Url(item.Zapatilla?.Imagen))" alt="" /></span>
+                    <span>
+                        @(item.Zapatilla?.NombreCompleto ?? "Modelo")
+                        <small>Talle @item.TalleTexto × @item.Cantidad · @Formato.Pesos(item.PrecioUnitario) por par</small>
+                    </span>
+                    <span class="precio">@Formato.Pesos(item.Subtotal)</span>
+                </div>
+            }
+        </div>
+        <div class="resumen-fila total"><span>Total</span><span class="precio">@Formato.Pesos(Model.Total)</span></div>
+    </section>
+
+    <div class="acciones">
+        <a class="btn" asp-action="Detalles" asp-route-id="@Model.Id">Seguir el pedido</a>
+        <a class="btn btn-borde" asp-controller="Zapatillas" asp-action="Index">Seguir mirando</a>
+    </div>
+</div>

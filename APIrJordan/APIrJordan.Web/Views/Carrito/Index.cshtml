@@ -1,0 +1,101 @@
+@model CarritoViewModel
+@{
+    ViewData["Title"] = "Carrito";
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Carrito</span>
+        <h1>Tu carrito</h1>
+        <p>
+            @if (Model.EstaVacio)
+            {
+                <text>Todavía no agregaste nada.</text>
+            }
+            else
+            {
+                <text>@Formato.Pares(Model.Pares) en @(Model.Lineas.Count == 1 ? "1 línea" : Model.Lineas.Count + " líneas").</text>
+            }
+        </p>
+    </div>
+    @if (!Model.EstaVacio)
+    {
+        <form asp-action="Vaciar" method="post" data-confirmar="¿Vaciar el carrito?">
+            <button type="submit" class="btn btn-peligro btn-chico">Vaciar carrito</button>
+        </form>
+    }
+</div>
+
+@if (Model.EstaVacio)
+{
+    <div class="vacio">
+        <strong>El carrito está vacío.</strong>
+        Elegí un modelo y tu talle en el catálogo.
+        <br />
+        <a class="btn" asp-controller="Zapatillas" asp-action="Index">Ir al catálogo</a>
+    </div>
+}
+else
+{
+    <div class="compra-layout">
+        <div class="lineas">
+            @foreach (var linea in Model.Lineas)
+            {
+                <article class="linea @(linea.Problema != null ? "con-problema" : null)">
+                    <a class="linea-imagen" asp-controller="Zapatillas" asp-action="Detalles" asp-route-id="@linea.Zapatilla.Id">
+                        <img src="@Url.Content(ZapatillaImagen.Url(linea.Zapatilla))" alt="" />
+                    </a>
+                    <div class="linea-info">
+                        <h3><a asp-controller="Zapatillas" asp-action="Detalles" asp-route-id="@linea.Zapatilla.Id">@linea.Zapatilla.Nombre</a></h3>
+                        <p class="meta">
+                            @if (!string.IsNullOrEmpty(linea.Zapatilla.Colorway))
+                            {
+                                <text>@linea.Zapatilla.Colorway · </text>
+                            }
+                            Talle @linea.TalleTexto · @Formato.Pesos(linea.Zapatilla.Precio) por par
+                        </p>
+                        @if (linea.Problema != null)
+                        {
+                            <p class="linea-problema">@linea.Problema</p>
+                        }
+                    </div>
+                    <div class="linea-acciones">
+                        <span class="precio">@Formato.Pesos(linea.Subtotal)</span>
+                        <form asp-action="Actualizar" method="post">
+                            <input type="hidden" name="zapatillaId" value="@linea.Zapatilla.Id" />
+                            <input type="hidden" name="talle" value="@linea.TalleTexto" />
+                            <div class="stepper chico" data-enviar>
+                                <button type="button" data-stepper="-" aria-label="Un par menos">−</button>
+                                <input type="number" name="cantidad" value="@linea.Cantidad" min="0" max="@CarritoService.MaximoPorLinea" aria-label="Cantidad" />
+                                <button type="button" data-stepper="+" aria-label="Un par más">+</button>
+                            </div>
+                            <noscript><button type="submit" class="btn btn-fantasma btn-chico">Actualizar</button></noscript>
+                        </form>
+                        <form asp-action="Quitar" method="post">
+                            <input type="hidden" name="zapatillaId" value="@linea.Zapatilla.Id" />
+                            <input type="hidden" name="talle" value="@linea.TalleTexto" />
+                            <button type="submit" class="btn btn-peligro btn-chico">Quitar</button>
+                        </form>
+                    </div>
+                </article>
+            }
+        </div>
+
+        <aside class="resumen caja" aria-label="Resumen de la compra">
+            <h2>Resumen</h2>
+            <div class="resumen-fila"><span>Pares</span><span>@Model.Pares</span></div>
+            <div class="resumen-fila"><span>Envío</span><span>A coordinar</span></div>
+            <div class="resumen-fila total"><span>Total</span><span class="precio">@Formato.Pesos(Model.Total)</span></div>
+            @if (Model.TieneProblemas)
+            {
+                <div class="aviso-inline rojo">Revisá las líneas marcadas antes de continuar.</div>
+                <span class="btn btn-bloque deshabilitado">Finalizar compra</span>
+            }
+            else
+            {
+                <a class="btn btn-bloque" asp-controller="Pedidos" asp-action="Checkout">Finalizar compra <span class="flecha" aria-hidden="true">→</span></a>
+            }
+            <p class="resumen-nota">Los precios y el stock se verifican de nuevo al confirmar. El carrito vive en la sesión de tu navegador: no se guarda en la base hasta que confirmás.</p>
+        </aside>
+    </div>
+}

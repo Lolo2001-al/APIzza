@@ -1,0 +1,156 @@
+@model ZapatillaDetalleViewModel
+@{
+    var zapatilla = Model.Zapatilla;
+    ViewData["Title"] = zapatilla.NombreCompleto;
+    var talles = zapatilla.Talles.OrderBy(t => t.Talle).ToList();
+    var disponibles = talles.Where(t => t.Disponible).ToList();
+
+    // Si viene un talle en la URL se preselecciona; si hay un solo talle disponible, también
+    var seleccionado = Model.TalleSeleccionado;
+    if (seleccionado == null && disponibles.Count == 1)
+    {
+        seleccionado = disponibles[0].Talle;
+    }
+}
+
+<nav class="migas" aria-label="Migas de pan">
+    <a asp-action="Index">Catálogo</a>
+    <span aria-hidden="true">/</span>
+    <a asp-action="Index" asp-route-categoria="@zapatilla.Categoria">@Categorias.Nombre(zapatilla.Categoria)</a>
+    <span aria-hidden="true">/</span>
+    <span>@zapatilla.Nombre</span>
+</nav>
+
+<div class="detalle">
+    <div class="detalle-visual">
+        <img src="@Url.Content(ZapatillaImagen.Url(zapatilla))" alt="@zapatilla.NombreCompleto" />
+        @if (!zapatilla.Activa)
+        {
+            <span class="tarjeta-sello agotado">Pausada</span>
+        }
+        else if (zapatilla.Agotada)
+        {
+            <span class="tarjeta-sello agotado">Agotado</span>
+        }
+        else if (zapatilla.StockTotal <= 3)
+        {
+            <span class="tarjeta-sello ultimos">Últimos pares</span>
+        }
+    </div>
+
+    <div class="detalle-info">
+        <span class="kicker">@Categorias.Nombre(zapatilla.Categoria)</span>
+        <h1>@zapatilla.Nombre</h1>
+        @if (!string.IsNullOrEmpty(zapatilla.Colorway))
+        {
+            <p class="detalle-colorway">Colorway “@zapatilla.Colorway”</p>
+        }
+
+        <div class="detalle-precio">
+            <span class="precio grande">@Formato.Pesos(zapatilla.Precio)</span>
+            <span class="tarjeta-talles">
+                @if (zapatilla.Agotada)
+                {
+                    <text>Sin stock</text>
+                }
+                else
+                {
+                    <text>@Formato.Pares(zapatilla.StockTotal) en @(zapatilla.TallesDisponibles == 1 ? "1 talle" : zapatilla.TallesDisponibles + " talles")</text>
+                }
+            </span>
+        </div>
+
+        @if (!string.IsNullOrEmpty(zapatilla.Descripcion))
+        {
+            <p class="detalle-descripcion">@zapatilla.Descripcion</p>
+        }
+
+        @if (!zapatilla.Activa)
+        {
+            <div class="aviso-inline gris">Este modelo está pausado: no aparece en el catálogo ni se puede comprar. Podés volver a publicarlo desde "Gestión del modelo".</div>
+        }
+        else if (zapatilla.Agotada)
+        {
+            <div class="aviso-inline rojo">Sin stock en ningún talle por ahora. Reponé desde "Editar y reponer stock" o esperá el próximo ingreso.</div>
+        }
+        else
+        {
+            <form asp-controller="Carrito" asp-action="Agregar" method="post">
+                <input type="hidden" name="zapatillaId" value="@zapatilla.Id" />
+
+                <fieldset class="talles" data-talles>
+                    <legend>Elegí tu talle <span class="talles-ayuda">Talles AR / EU</span></legend>
+                    <div class="talles-grilla">
+                        @foreach (var talle in talles)
+                        {
+                            var idTalle = "talle-" + talle.TalleTexto.Replace(".", "-");
+                            <div class="talle @(talle.UltimosPares ? "ultimos" : null)">
+                                <input type="radio" name="talle" id="@idTalle" value="@talle.TalleTexto" data-stock="@talle.Cantidad" disabled="@(!talle.Disponible)" checked="@(seleccionado == talle.Talle && talle.Disponible)" />
+                                <label for="@idTalle">
+                                    @talle.TalleTexto
+                                    @if (!talle.Disponible)
+                                    {
+                                        <small>agotado</small>
+                                    }
+                                    else if (talle.UltimosPares)
+                                    {
+                                        <small>@(talle.Cantidad == 1 ? "último" : "quedan 2")</small>
+                                    }
+                                </label>
+                            </div>
+                        }
+                    </div>
+                </fieldset>
+
+                <div class="compra-fila">
+                    <div class="stepper">
+                        <button type="button" data-stepper="-" aria-label="Un par menos">−</button>
+                        <input type="number" name="cantidad" value="1" min="1" max="@CarritoService.MaximoPorLinea" data-cantidad-compra data-maximo="@CarritoService.MaximoPorLinea" aria-label="Cantidad" />
+                        <button type="button" data-stepper="+" aria-label="Un par más">+</button>
+                    </div>
+                    <button type="submit" class="btn" data-boton-comprar>Agregar al carrito <span class="flecha" aria-hidden="true">→</span></button>
+                </div>
+                <p class="compra-ayuda" data-talle-ayuda>Elegí un talle para continuar.</p>
+            </form>
+        }
+
+        <div class="gestion">
+            <span class="gestion-titulo">Gestión del modelo</span>
+            <div class="acciones">
+                <a class="btn btn-fantasma btn-chico" asp-action="Editar" asp-route-id="@zapatilla.Id">Editar y reponer stock</a>
+                <form asp-action="Pausar" asp-route-id="@zapatilla.Id" method="post">
+                    <button type="submit" class="btn btn-fantasma btn-chico">@(zapatilla.Activa ? "Pausar publicación" : "Volver a publicar")</button>
+                </form>
+                @if (Model.SeVendio)
+                {
+                    <span class="campo-ayuda">Tiene ventas registradas: se puede pausar pero no eliminar.</span>
+                }
+                else
+                {
+                    <form asp-action="Eliminar" asp-route-id="@zapatilla.Id" method="post" data-confirmar="¿Eliminar @zapatilla.NombreCompleto del catálogo? Esta acción no se puede deshacer.">
+                        <button type="submit" class="btn btn-peligro btn-chico">Eliminar</button>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Relacionadas.Count > 0)
+{
+    <section class="relacionadas" aria-labelledby="relacionadas-titulo">
+        <div class="encabezado-seccion">
+            <div>
+                <span class="kicker">También en @Categorias.Nombre(zapatilla.Categoria)</span>
+                <h2 id="relacionadas-titulo">Te pueden gustar.</h2>
+            </div>
+            <a class="enlace-flecha" asp-action="Index" asp-route-categoria="@zapatilla.Categoria">Ver la categoría <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="grilla">
+            @foreach (var relacionada in Model.Relacionadas)
+            {
+                <partial name="_TarjetaZapatilla" model="relacionada" />
+            }
+        </div>
+    </section>
+}

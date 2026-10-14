@@ -1,0 +1,16 @@
+@model ZapatillaFormViewModel
+@{
+    ViewData["Title"] = "Cargar modelo";
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Catálogo</span>
+        <h1>Cargar un modelo nuevo</h1>
+        <p>Completá la ficha y el stock inicial por talle. Todo se puede editar después.</p>
+    </div>
+</div>
+
+<form asp-action="Crear" method="post" class="formulario formulario-ancho">
+    <partial name="_CamposZapatilla" model="Model" />
+</form>

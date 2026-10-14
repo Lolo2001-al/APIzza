@@ -1,0 +1,70 @@
+// DER de APIr Jordan - renderizar con: dot -Tpng DER_APIrJordan.dot -o DER_APIrJordan.png
+digraph DER_APIrJordan {
+    graph [rankdir=LR, splines=ortho, nodesep=0.7, ranksep=1.1, fontname="Helvetica"];
+    node  [shape=plaintext, fontname="Helvetica", fontsize=11];
+    edge  [fontname="Helvetica", fontsize=10, color="#4f4f4f"];
+
+    Zapatillas [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD BGCOLOR="#111111" ALIGN="CENTER"><FONT COLOR="white"><B>Zapatillas</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="id"><U>Id</U> INT PK</TD></TR>
+            <TR><TD ALIGN="LEFT">Nombre VARCHAR(120)</TD></TR>
+            <TR><TD ALIGN="LEFT">Colorway VARCHAR(80)</TD></TR>
+            <TR><TD ALIGN="LEFT">Descripcion VARCHAR(600)</TD></TR>
+            <TR><TD ALIGN="LEFT">Precio DECIMAL(10,2)</TD></TR>
+            <TR><TD ALIGN="LEFT">Categoria VARCHAR(30)</TD></TR>
+            <TR><TD ALIGN="LEFT">Imagen VARCHAR(120)</TD></TR>
+            <TR><TD ALIGN="LEFT">Destacada TINYINT(1)</TD></TR>
+            <TR><TD ALIGN="LEFT">Activa TINYINT(1)</TD></TR>
+            <TR><TD ALIGN="LEFT">CreadoEn DATETIME(6)</TD></TR>
+        </TABLE>>];
+
+    StockTalles [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD BGCOLOR="#d7262c" ALIGN="CENTER"><FONT COLOR="white"><B>StockTalles</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT"><U>Id</U> INT PK</TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="zap">ZapatillaId INT FK</TD></TR>
+            <TR><TD ALIGN="LEFT">Talle DECIMAL(3,1)</TD></TR>
+            <TR><TD ALIGN="LEFT">Cantidad INT (CHECK &gt;= 0)</TD></TR>
+            <TR><TD ALIGN="LEFT"><I>UNIQUE (ZapatillaId, Talle)</I></TD></TR>
+        </TABLE>>];
+
+    Clientes [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD BGCOLOR="#111111" ALIGN="CENTER"><FONT COLOR="white"><B>Clientes</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="id"><U>Id</U> INT PK</TD></TR>
+            <TR><TD ALIGN="LEFT">Nombre VARCHAR(120)</TD></TR>
+            <TR><TD ALIGN="LEFT">Email VARCHAR(160) UNIQUE</TD></TR>
+            <TR><TD ALIGN="LEFT">Telefono VARCHAR(40)</TD></TR>
+            <TR><TD ALIGN="LEFT">Direccion VARCHAR(250)</TD></TR>
+            <TR><TD ALIGN="LEFT">CreadoEn DATETIME(6)</TD></TR>
+        </TABLE>>];
+
+    Pedidos [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD BGCOLOR="#111111" ALIGN="CENTER"><FONT COLOR="white"><B>Pedidos</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="id"><U>Id</U> INT PK</TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="cli">ClienteId INT FK</TD></TR>
+            <TR><TD ALIGN="LEFT">Estado VARCHAR(30)</TD></TR>
+            <TR><TD ALIGN="LEFT">Total DECIMAL(10,2)</TD></TR>
+            <TR><TD ALIGN="LEFT">Nota VARCHAR(300)</TD></TR>
+            <TR><TD ALIGN="LEFT">CreadoEn DATETIME(6)</TD></TR>
+            <TR><TD ALIGN="LEFT">ActualizadoEn DATETIME(6)</TD></TR>
+        </TABLE>>];
+
+    ItemsPedido [label=<
+        <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0" CELLPADDING="5">
+            <TR><TD BGCOLOR="#111111" ALIGN="CENTER"><FONT COLOR="white"><B>ItemsPedido</B></FONT></TD></TR>
+            <TR><TD ALIGN="LEFT"><U>Id</U> INT PK</TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="ped">PedidoId INT FK</TD></TR>
+            <TR><TD ALIGN="LEFT" PORT="zap">ZapatillaId INT FK</TD></TR>
+            <TR><TD ALIGN="LEFT">Talle DECIMAL(3,1)</TD></TR>
+            <TR><TD ALIGN="LEFT">Cantidad INT (CHECK &gt; 0)</TD></TR>
+            <TR><TD ALIGN="LEFT">PrecioUnitario DECIMAL(10,2)</TD></TR>
+        </TABLE>>];
+
+    Zapatillas:id -> StockTalles:zap  [label="1 : N  (ON DELETE CASCADE)"];
+    Clientes:id   -> Pedidos:cli      [label="1 : N  (ON DELETE RESTRICT)"];
+    Pedidos:id    -> ItemsPedido:ped  [label="1 : N  (ON DELETE CASCADE)"];
+    Zapatillas:id -> ItemsPedido:zap  [label="1 : N  (ON DELETE RESTRICT)"];
+}

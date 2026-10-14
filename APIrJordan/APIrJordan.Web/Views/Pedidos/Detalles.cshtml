@@ -1,0 +1,133 @@
+@model Pedido
+@{
+    ViewData["Title"] = "Pedido #" + Model.Id;
+    var posicion = EstadoPedido.Posicion(Model.Estado);                 // -1 si está cancelado
+    var progreso = Model.Cancelado ? 0 : posicion / 3.0;                 // 0 → 1 a lo largo del circuito
+    var siguientes = EstadoPedido.Siguientes(Model.Estado);
+}
+
+<nav class="migas" aria-label="Migas de pan">
+    <a asp-action="Index">Pedidos</a>
+    <span aria-hidden="true">/</span>
+    <span>Pedido #@Model.Id</span>
+</nav>
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">@Formato.FechaHora(Model.CreadoEn)</span>
+        <h1>Pedido #@Model.Id</h1>
+        <p>@EstadoPedido.Descripcion(Model.Estado)</p>
+    </div>
+    <partial name="_Estado" model="Model.Estado" />
+</div>
+
+<section class="caja">
+    <ol class="linea-tiempo @(Model.Cancelado ? "cancelada" : null)" data-progreso="@progreso.ToString(CultureInfo.InvariantCulture)">
+        @for (var i = 0; i < EstadoPedido.Circuito.Length; i++)
+        {
+            var paso = EstadoPedido.Circuito[i];
+            var hecho = Model.Cancelado ? i == 0 : i <= posicion;
+            var actual = !Model.Cancelado && i == posicion;
+            <li class="@(hecho ? "hecho" : null) @(actual ? "actual" : null)">@EstadoPedido.Nombre(paso)</li>
+        }
+    </ol>
+    @if (Model.Cancelado)
+    {
+        <div class="aviso-inline rojo" style="margin-top:1.25rem">Pedido cancelado el @Formato.FechaHora(Model.ActualizadoEn). Los pares volvieron al stock de cada talle.</div>
+    }
+    else
+    {
+        <p class="campo-ayuda" style="margin-top:1rem">Último cambio: @Formato.FechaHora(Model.ActualizadoEn) (@Formato.Relativo(Model.ActualizadoEn)).</p>
+    }
+</section>
+
+<div class="detalle-pedido" style="margin-top:1rem">
+    <div class="tabla-scroll">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Modelo</th>
+                    <th>Talle</th>
+                    <th class="num">Cantidad</th>
+                    <th class="num">Precio</th>
+                    <th class="num">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    <tr>
+                        <td>
+                            <div class="celda-producto">
+                                <span class="mini-imagen"><img src="@Url.Content(ZapatillaImagen.Url(item.Zapatilla?.Imagen))" alt="" /></span>
+                                <span>
+                                    @if (item.Zapatilla != null)
+                                    {
+                                        <a class="fila-enlace" asp-controller="Zapatillas" asp-action="Detalles" asp-route-id="@item.ZapatillaId">@item.Zapatilla.Nombre</a>
+                                        <div class="silencio">@item.Zapatilla.Colorway</div>
+                                    }
+                                    else
+                                    {
+                                        <text>Modelo #@item.ZapatillaId</text>
+                                    }
+                                </span>
+                            </div>
+                        </td>
+                        <td>@item.TalleTexto</td>
+                        <td class="num">@item.Cantidad</td>
+                        <td class="num">@Formato.Pesos(item.PrecioUnitario)</td>
+                        <td class="num precio">@Formato.Pesos(item.Subtotal)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="total-pedido"><span>Total</span><span class="precio">@Formato.Pesos(Model.Total)</span></div>
+    </div>
+
+    <aside>
+        <section class="caja">
+            <h2>Cliente</h2>
+            <dl class="ficha-datos">
+                <div><dt>Nombre</dt><dd><a class="enlace" asp-controller="Clientes" asp-action="Detalles" asp-route-id="@Model.ClienteId">@Model.Cliente?.Nombre</a></dd></div>
+                <div><dt>Email</dt><dd>@Model.Cliente?.Email</dd></div>
+                <div><dt>Teléfono</dt><dd>@(string.IsNullOrEmpty(Model.Cliente?.Telefono) ? "—" : Model.Cliente!.Telefono)</dd></div>
+                <div><dt>Entrega</dt><dd>@Model.Cliente?.Direccion</dd></div>
+                @if (!string.IsNullOrEmpty(Model.Nota))
+                {
+                    <div><dt>Nota</dt><dd>@Model.Nota</dd></div>
+                }
+            </dl>
+        </section>
+
+        <section class="caja" style="margin-top:1rem">
+            <h2>Gestión</h2>
+            @if (siguientes.Count == 0)
+            {
+                <p class="campo-ayuda">Este pedido ya terminó su circuito: no admite más cambios.</p>
+            }
+            else
+            {
+                <p class="campo-ayuda">Pasos posibles desde "@EstadoPedido.Nombre(Model.Estado).ToLowerInvariant()":</p>
+                <div class="acciones-estado">
+                    @foreach (var estado in siguientes)
+                    {
+                        if (estado == EstadoPedido.Cancelado)
+                        {
+                            <form asp-action="CambiarEstado" asp-route-id="@Model.Id" method="post" data-confirmar="¿Cancelar el pedido #@Model.Id? Los pares vuelven al stock.">
+                                <input type="hidden" name="estado" value="@estado" />
+                                <button type="submit" class="btn btn-peligro">@EstadoPedido.Accion(estado)</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="CambiarEstado" asp-route-id="@Model.Id" method="post">
+                                <input type="hidden" name="estado" value="@estado" />
+                                <button type="submit" class="btn">@EstadoPedido.Accion(estado) <span class="flecha" aria-hidden="true">→</span></button>
+                            </form>
+                        }
+                    }
+                </div>
+            }
+        </section>
+    </aside>
+</div>

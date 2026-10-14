@@ -1,0 +1,167 @@
+@model PanelViewModel
+@{
+    ViewData["Title"] = "Panel";
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Gestión</span>
+        <h1>Panel</h1>
+        <p>Los mismos números que las consultas de <code>database/consultas.sql</code>, calculados en vivo. Los pedidos cancelados no cuentan como venta.</p>
+    </div>
+    <div class="acciones">
+        <a class="btn btn-fantasma btn-chico" asp-controller="Pedidos" asp-action="Index">Ver pedidos</a>
+        <a class="btn btn-fantasma btn-chico" asp-controller="Zapatillas" asp-action="Crear">+ Cargar modelo</a>
+    </div>
+</div>
+
+<div class="kpis">
+    <div class="kpi revelar">
+        <span class="kpi-etiqueta">Ventas</span>
+        <div class="kpi-valor" data-contador="@Model.VentasTotales.ToString("0", CultureInfo.InvariantCulture)" data-prefijo="$ ">@Formato.Pesos(Model.VentasTotales)</div>
+        <div class="kpi-detalle">Ticket promedio @Formato.Pesos(Model.TicketPromedio)</div>
+    </div>
+    <div class="kpi revelar">
+        <span class="kpi-etiqueta">Pedidos</span>
+        <div class="kpi-valor" data-contador="@Model.PedidosTotales">@Model.PedidosTotales</div>
+        <div class="kpi-detalle">@Model.PedidosActivos en curso</div>
+    </div>
+    <div class="kpi revelar">
+        <span class="kpi-etiqueta">Pares vendidos</span>
+        <div class="kpi-valor" data-contador="@Model.ParesVendidos">@Model.ParesVendidos</div>
+        <div class="kpi-detalle">@Model.ParesEnStock todavía en stock</div>
+    </div>
+    <div class="kpi revelar">
+        <span class="kpi-etiqueta">Catálogo</span>
+        <div class="kpi-valor" data-contador="@Model.ModelosPublicados">@Model.ModelosPublicados</div>
+        <div class="kpi-detalle">@(Model.ModelosAgotados == 0 ? "Ningún modelo agotado" : Model.ModelosAgotados == 1 ? "1 modelo agotado" : Model.ModelosAgotados + " modelos agotados")</div>
+    </div>
+</div>
+
+<section class="caja" style="margin-bottom:1rem">
+    <h2>Pedidos por estado</h2>
+    <div class="estados-resumen">
+        @foreach (var estado in EstadoPedido.Todos)
+        {
+            <a class="estado-caja" asp-controller="Pedidos" asp-action="Index" asp-route-estado="@estado">
+                <strong>@Model.Conteo(estado)</strong>
+                <span>@EstadoPedido.Nombre(estado)</span>
+            </a>
+        }
+    </div>
+</section>
+
+<div class="panel-grilla">
+    <section class="caja revelar">
+        <h2>Modelos más vendidos</h2>
+        @if (Model.MasVendidas.Count == 0)
+        {
+            <p class="campo-ayuda">Todavía no hay ventas.</p>
+        }
+        else
+        {
+            <div class="barras">
+                @foreach (var fila in Model.MasVendidas)
+                {
+                    <div class="barra-fila">
+                        <span class="barra-etiqueta">@fila.Etiqueta <small>@fila.Detalle</small></span>
+                        <span class="barra-valor">@Formato.Pares(fila.Cantidad)</span>
+                        <div class="barra-pista"><div class="barra-relleno" data-porcentaje="@fila.Porcentaje.ToString(CultureInfo.InvariantCulture)"></div></div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="caja revelar">
+        <h2>Talles más vendidos</h2>
+        @if (Model.TallesMasVendidos.Count == 0)
+        {
+            <p class="campo-ayuda">Todavía no hay ventas.</p>
+        }
+        else
+        {
+            <div class="barras">
+                @foreach (var fila in Model.TallesMasVendidos)
+                {
+                    <div class="barra-fila">
+                        <span class="barra-etiqueta">@fila.Etiqueta</span>
+                        <span class="barra-valor">@Formato.Pares(fila.Cantidad)</span>
+                        <div class="barra-pista"><div class="barra-relleno acento" data-porcentaje="@fila.Porcentaje.ToString(CultureInfo.InvariantCulture)"></div></div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="caja revelar">
+        <h2>Ventas por categoría</h2>
+        @if (Model.VentasPorCategoria.Count == 0)
+        {
+            <p class="campo-ayuda">Todavía no hay ventas.</p>
+        }
+        else
+        {
+            <div class="barras">
+                @foreach (var fila in Model.VentasPorCategoria)
+                {
+                    <div class="barra-fila">
+                        <span class="barra-etiqueta">@fila.Etiqueta <small>@Formato.Pares(fila.Cantidad)</small></span>
+                        <span class="barra-valor">@Formato.Pesos(fila.Monto)</span>
+                        <div class="barra-pista"><div class="barra-relleno" data-porcentaje="@fila.Porcentaje.ToString(CultureInfo.InvariantCulture)"></div></div>
+                    </div>
+                }
+            </div>
+        }
+    </section>
+
+    <section class="caja revelar">
+        <h2>Stock bajo (1 o 2 pares)</h2>
+        @if (Model.StockBajo.Count == 0)
+        {
+            <p class="campo-ayuda">Ningún talle está por agotarse.</p>
+        }
+        else
+        {
+            <ul class="lista-simple">
+                @foreach (var stock in Model.StockBajo)
+                {
+                    <li>
+                        <span>
+                            <a class="fila-enlace" asp-controller="Zapatillas" asp-action="Editar" asp-route-id="@stock.ZapatillaId">@(stock.Zapatilla?.NombreCompleto ?? "Modelo")</a>
+                            <small>· talle @stock.TalleTexto</small>
+                        </span>
+                        <span class="pildora">@(stock.Cantidad == 1 ? "último par" : "quedan 2")</span>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
+
+    <section class="caja revelar panel-ancho">
+        <h2>Últimos pedidos</h2>
+        @if (Model.UltimosPedidos.Count == 0)
+        {
+            <p class="campo-ayuda">Todavía no hay pedidos.</p>
+        }
+        else
+        {
+            <ul class="lista-simple">
+                @foreach (var pedido in Model.UltimosPedidos)
+                {
+                    <li>
+                        <span>
+                            <a class="fila-enlace" asp-controller="Pedidos" asp-action="Detalles" asp-route-id="@pedido.Id">#@pedido.Id</a>
+                            @pedido.Cliente?.Nombre
+                            <small>· @Formato.Pares(pedido.CantidadPares) · @Formato.Relativo(pedido.CreadoEn)</small>
+                        </span>
+                        <span class="acciones">
+                            <partial name="_Estado" model="pedido.Estado" />
+                            <span class="precio">@Formato.Pesos(pedido.Total)</span>
+                        </span>
+                    </li>
+                }
+            </ul>
+        }
+    </section>
+</div>

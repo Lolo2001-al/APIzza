@@ -1,0 +1,49 @@
+erDiagram
+    CLIENTES ||--o{ PEDIDOS : realiza
+    PEDIDOS ||--|{ ITEMS_PEDIDO : contiene
+    ZAPATILLAS ||--o{ ITEMS_PEDIDO : "se vende en"
+    ZAPATILLAS ||--|{ STOCK_TALLES : "tiene stock por"
+
+    ZAPATILLAS {
+        int Id PK
+        varchar Nombre
+        varchar Colorway
+        varchar Descripcion
+        decimal Precio
+        varchar Categoria
+        varchar Imagen
+        bool Destacada
+        bool Activa
+        datetime CreadoEn
+    }
+    STOCK_TALLES {
+        int Id PK
+        int ZapatillaId FK
+        decimal Talle "UNIQUE junto con ZapatillaId"
+        int Cantidad "CHECK >= 0"
+    }
+    CLIENTES {
+        int Id PK
+        varchar Nombre
+        varchar Email UK
+        varchar Telefono
+        varchar Direccion
+        datetime CreadoEn
+    }
+    PEDIDOS {
+        int Id PK
+        int ClienteId FK
+        varchar Estado
+        decimal Total
+        varchar Nota
+        datetime CreadoEn
+        datetime ActualizadoEn
+    }
+    ITEMS_PEDIDO {
+        int Id PK
+        int PedidoId FK
+        int ZapatillaId FK
+        decimal Talle
+        int Cantidad
+        decimal PrecioUnitario
+    }

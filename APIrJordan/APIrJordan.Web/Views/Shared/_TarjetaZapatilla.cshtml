@@ -1,0 +1,46 @@
+@model Zapatilla
+@{
+    // Sello de la esquina: agotado > últimos pares > nuevo
+    string? sello = null;
+    if (Model.Agotada)
+    {
+        sello = "agotado";
+    }
+    else if (Model.StockTotal <= 3)
+    {
+        sello = "ultimos";
+    }
+    else if ((DateTime.Now - Model.CreadoEn).TotalDays <= 7)
+    {
+        sello = "nuevo";
+    }
+}
+<article class="tarjeta revelar">
+    <a class="tarjeta-imagen" asp-controller="Zapatillas" asp-action="Detalles" asp-route-id="@Model.Id" aria-label="Ver @Model.NombreCompleto">
+        <img src="@Url.Content(ZapatillaImagen.Url(Model))" alt="@Model.NombreCompleto" loading="lazy" />
+        @if (sello == "agotado")
+        {
+            <span class="tarjeta-sello agotado">Agotado</span>
+        }
+        else if (sello == "ultimos")
+        {
+            <span class="tarjeta-sello ultimos">Últimos pares</span>
+        }
+        else if (sello == "nuevo")
+        {
+            <span class="tarjeta-sello nuevo">Nuevo</span>
+        }
+    </a>
+    <div class="tarjeta-cuerpo">
+        <span class="tarjeta-meta">@Categorias.Nombre(Model.Categoria)</span>
+        <h3><a asp-controller="Zapatillas" asp-action="Detalles" asp-route-id="@Model.Id">@Model.Nombre</a></h3>
+        @if (!string.IsNullOrEmpty(Model.Colorway))
+        {
+            <span class="tarjeta-colorway">@Model.Colorway</span>
+        }
+        <div class="tarjeta-final">
+            <span class="precio">@Formato.Pesos(Model.Precio)</span>
+            <span class="tarjeta-talles">@(Model.Agotada ? "Sin stock" : Model.TallesDisponibles == 1 ? "1 talle" : Model.TallesDisponibles + " talles")</span>
+        </div>
+    </div>
+</article>

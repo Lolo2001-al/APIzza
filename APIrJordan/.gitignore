@@ -1,0 +1,6 @@
+# Compilados de .NET (se regeneran con dotnet build)
+bin/
+obj/
+*.user
+.vs/
+*.swp

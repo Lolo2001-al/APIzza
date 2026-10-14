@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" role="img" aria-label="Zapatilla">
+  <rect width="400" height="400" fill="#ffffff"/>
+  <g fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- suela -->
+    <path d="M52 258 C 60 290, 90 300, 130 300 L 340 300 C 362 300, 372 286, 366 268 L 360 252 Z"/>
+    <!-- empeine y caña -->
+    <path d="M52 258 C 48 220, 70 190, 110 180 L 150 170 C 165 120, 175 90, 196 80 L 228 92 C 250 100, 268 118, 282 140 L 300 170 C 330 190, 352 215, 360 252"/>
+    <!-- lengüeta y cordones -->
+    <path d="M196 80 C 190 110, 186 140, 186 170"/>
+    <path d="M186 125 L 232 112 M 188 148 L 236 134 M 192 170 L 240 156"/>
+    <!-- panel lateral y talón -->
+    <path d="M150 170 C 190 185, 230 192, 282 190"/>
+    <path d="M110 180 C 120 215, 160 238, 230 240"/>
+    <path d="M300 170 C 296 200, 290 226, 282 250"/>
+    <!-- puntera -->
+    <path d="M300 170 C 320 200, 340 230, 360 252"/>
+  </g>
+  <circle cx="90" cy="246" r="6" fill="#d7262c"/>
+</svg>

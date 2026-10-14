@@ -1,0 +1,152 @@
+@model InicioViewModel
+@{
+    ViewData["Title"] = "Inicio";
+    var heroe = Model.Destacadas.FirstOrDefault() ?? Model.Novedades.FirstOrDefault();
+}
+
+<section class="hero" aria-labelledby="hero-titulo">
+    <div class="hero-texto">
+        <span class="kicker">Catálogo con stock real por talle</span>
+        <h1 id="hero-titulo">
+            <span class="linea"><span>Jordan.</span></span>
+            <span class="linea"><span>Tu talle.</span></span>
+            <span class="linea"><span><em>Sin vueltas.</em></span></span>
+        </h1>
+        <p>Retro, lifestyle y básquet. Cada modelo muestra qué talles quedan, el carrito reserva solo lo que existe y cada pedido se sigue hasta la entrega.</p>
+        <div class="hero-botones">
+            <a class="btn" asp-controller="Zapatillas" asp-action="Index">Ver catálogo <span class="flecha" aria-hidden="true">→</span></a>
+            <a class="btn btn-borde" asp-controller="Zapatillas" asp-action="Index" asp-route-categoria="retro">Solo retro</a>
+        </div>
+        <div class="hero-datos">
+            <div><strong data-contador="@Model.TotalModelos">@Model.TotalModelos</strong><span>modelos publicados</span></div>
+            <div><strong data-contador="@Model.TotalPares">@Model.TotalPares</strong><span>pares en stock</span></div>
+            <div><strong data-contador="@Model.PedidosEntregados">@Model.PedidosEntregados</strong><span>pedidos entregados</span></div>
+        </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+        @if (heroe != null)
+        {
+            <img src="@Url.Content(ZapatillaImagen.Url(heroe))" alt="" />
+            <a class="hero-etiqueta" asp-controller="Zapatillas" asp-action="Detalles" asp-route-id="@heroe.Id">
+                Destacada
+                <strong>@heroe.NombreCompleto</strong>
+            </a>
+        }
+        else
+        {
+            <img src="~/images/zapatillas/generica.svg" alt="" />
+        }
+    </div>
+</section>
+
+<div class="marquesina" aria-hidden="true">
+    <div class="marquesina-pista">
+        @for (var repeticion = 0; repeticion < 2; repeticion++)
+        {
+            <span>Retro</span>
+            <span>Lifestyle</span>
+            <span>Básquet</span>
+            <span>Stock por talle</span>
+            <span>Carrito</span>
+            <span>Seguimiento del pedido</span>
+            <span>Talles 38 al 45</span>
+        }
+    </div>
+</div>
+
+<section class="seccion" aria-labelledby="categorias-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="kicker">Tres formas de usarlas</span>
+            <h2 id="categorias-titulo">Elegí por dónde empezar.</h2>
+        </div>
+        <a class="enlace-flecha" asp-controller="Zapatillas" asp-action="Index">Ver todo el catálogo <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="categorias-grilla">
+        @{ var numero = 0; }
+        @foreach (var categoria in Categorias.Todas)
+        {
+            numero++;
+            <a class="categoria-card revelar" asp-controller="Zapatillas" asp-action="Index" asp-route-categoria="@categoria">
+                <span class="categoria-numero">0@numero</span>
+                <span class="categoria-nombre">@Categorias.Nombre(categoria)</span>
+                <span class="categoria-descripcion">@Categorias.Descripcion(categoria)</span>
+                <span class="categoria-cantidad">@(Model.Conteo(categoria) == 1 ? "1 modelo" : Model.Conteo(categoria) + " modelos")</span>
+                <span class="categoria-flecha" aria-hidden="true">↗</span>
+            </a>
+        }
+    </div>
+</section>
+
+<section class="seccion" aria-labelledby="destacadas-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="kicker">Selección</span>
+            <h2 id="destacadas-titulo">Destacadas de la semana.</h2>
+            <p>Los modelos que más se piden. Si aparece "Últimos pares", no lo pienses mucho.</p>
+        </div>
+        <a class="enlace-flecha" asp-controller="Zapatillas" asp-action="Index">Explorar todas <span aria-hidden="true">↗</span></a>
+    </div>
+    @if (Model.Destacadas.Count > 0)
+    {
+        <div class="grilla">
+            @foreach (var zapatilla in Model.Destacadas)
+            {
+                <partial name="_TarjetaZapatilla" model="zapatilla" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="vacio"><strong>Todavía no hay modelos destacados.</strong>Marcá "Mostrar en la portada" al cargar o editar un modelo.</div>
+    }
+</section>
+
+<section class="seccion" aria-labelledby="novedades-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="kicker">Recién llegadas</span>
+            <h2 id="novedades-titulo">Últimos ingresos.</h2>
+        </div>
+        <a class="enlace-flecha" asp-controller="Zapatillas" asp-action="Index" asp-route-orden="nuevos">Ver novedades <span aria-hidden="true">↗</span></a>
+    </div>
+    @if (Model.Novedades.Count > 0)
+    {
+        <div class="grilla">
+            @foreach (var zapatilla in Model.Novedades)
+            {
+                <partial name="_TarjetaZapatilla" model="zapatilla" />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="vacio"><strong>El catálogo está vacío.</strong><a class="btn" asp-controller="Zapatillas" asp-action="Crear">Cargar el primer modelo</a></div>
+    }
+</section>
+
+<section class="seccion" aria-labelledby="pasos-titulo">
+    <div class="encabezado-seccion">
+        <div>
+            <span class="kicker">Así de simple</span>
+            <h2 id="pasos-titulo">De la ficha a tu puerta.</h2>
+        </div>
+    </div>
+    <div class="pasos-grilla">
+        <div class="paso revelar"><span class="paso-numero">01</span><h3>Elegí modelo y talle</h3><p>En la ficha ves qué talles quedan. Los agotados aparecen tachados: no hay sorpresas.</p></div>
+        <div class="paso revelar"><span class="paso-numero">02</span><h3>Armá el carrito</h3><p>Sumá los pares que quieras. El stock se vuelve a verificar al confirmar.</p></div>
+        <div class="paso revelar"><span class="paso-numero">03</span><h3>Seguí tu pedido</h3><p>Pendiente, pagado, enviado, entregado. Si se cancela, el stock vuelve al catálogo.</p></div>
+    </div>
+</section>
+
+<section class="cta-final" aria-labelledby="cta-titulo">
+    <div>
+        <span class="kicker">¿Ya sabés cuál?</span>
+        <h2 id="cta-titulo">Tu talle te está esperando.</h2>
+        <p>Entrá al catálogo y filtrá por talle para ver solo lo que podés comprar hoy.</p>
+    </div>
+    <div class="acciones">
+        <a class="btn btn-claro" asp-controller="Zapatillas" asp-action="Index" asp-route-talle="42">Ver talle 42 <span class="flecha" aria-hidden="true">→</span></a>
+        <a class="btn btn-borde" style="color:#fff;border-color:rgba(255,255,255,.4)" asp-controller="Pedidos" asp-action="Index">Seguir un pedido</a>
+    </div>
+</section>

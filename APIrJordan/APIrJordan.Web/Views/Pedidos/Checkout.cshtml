@@ -1,0 +1,80 @@
+@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Finalizar compra";
+}
+
+<div class="encabezado-pagina">
+    <div>
+        <span class="kicker">Checkout</span>
+        <h1>Casi listo.</h1>
+        <p>Completá tus datos de entrega. El pedido queda registrado como pendiente hasta que se acredite el pago.</p>
+    </div>
+    <div class="acciones">
+        <a class="btn btn-fantasma btn-chico" asp-controller="Carrito" asp-action="Index">← Volver al carrito</a>
+    </div>
+</div>
+
+<form asp-action="Checkout" method="post" class="compra-layout">
+    <div>
+        <div asp-validation-summary="ModelOnly" class="error"></div>
+
+        <section class="caja">
+            <h2><span class="numero">1</span> Tus datos</h2>
+
+            <div class="campos-2col">
+                <div class="campo">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" type="text" autocomplete="name" />
+                    <span asp-validation-for="Nombre" class="error"></span>
+                </div>
+                <div class="campo">
+                    <label asp-for="Email"></label>
+                    <input asp-for="Email" type="email" autocomplete="email" />
+                    <span class="campo-ayuda">Si ya compraste antes, usamos el mismo cliente.</span>
+                    <span asp-validation-for="Email" class="error"></span>
+                </div>
+            </div>
+
+            <div class="campos-2col">
+                <div class="campo">
+                    <label asp-for="Telefono"></label>
+                    <input asp-for="Telefono" type="tel" autocomplete="tel" />
+                    <span asp-validation-for="Telefono" class="error"></span>
+                </div>
+                <div class="campo">
+                    <label asp-for="Direccion"></label>
+                    <input asp-for="Direccion" type="text" autocomplete="street-address" />
+                    <span asp-validation-for="Direccion" class="error"></span>
+                </div>
+            </div>
+
+            <div class="campo">
+                <label asp-for="Nota"></label>
+                <textarea asp-for="Nota" rows="3" placeholder="Horario, referencias para encontrar la dirección..."></textarea>
+                <span asp-validation-for="Nota" class="error"></span>
+            </div>
+        </section>
+    </div>
+
+    <aside class="resumen caja" aria-label="Resumen del pedido">
+        <h2><span class="numero">2</span> Tu pedido</h2>
+        <div class="resumen-lineas">
+            @foreach (var linea in Model.Lineas)
+            {
+                <div class="resumen-linea">
+                    <span class="linea-imagen"><img src="@Url.Content(ZapatillaImagen.Url(linea.Zapatilla))" alt="" /></span>
+                    <span>
+                        @linea.Zapatilla.Nombre
+                        <small>Talle @linea.TalleTexto × @linea.Cantidad</small>
+                    </span>
+                    <span class="precio">@Formato.Pesos(linea.Subtotal)</span>
+                </div>
+            }
+        </div>
+        <div class="resumen-fila"><span>Pares</span><span>@Model.Pares</span></div>
+        <div class="resumen-fila"><span>Envío</span><span>A coordinar</span></div>
+        <div class="resumen-fila total"><span>Total</span><span class="precio">@Formato.Pesos(Model.Total)</span></div>
+        <button type="submit" class="btn btn-bloque">Confirmar pedido <span class="flecha" aria-hidden="true">→</span></button>
+        <p class="resumen-nota">Al confirmar se descuenta el stock de cada talle en la misma operación en que se guarda el pedido: todo o nada.</p>
+    </aside>
+</form>
