@@ -1,0 +1,20 @@
+@model APIzza.Web.ViewModels.LoginViewModel
+@{
+    ViewData["Title"] = "Iniciar sesión";
+}
+<section class="seccion-formulario">
+    <h1>Iniciar sesión</h1>
+    <p>Ingresá con tu correo y contraseña.</p>
+    <form asp-action="IniciarSesion" method="post" class="formulario">
+        <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+        <div asp-validation-summary="ModelOnly" class="errores"></div>
+        <label asp-for="Email">Correo electrónico</label>
+        <input asp-for="Email" autocomplete="email" />
+        <span asp-validation-for="Email" class="errores"></span>
+        <label asp-for="Contrasena">Contraseña</label>
+        <input asp-for="Contrasena" autocomplete="current-password" />
+        <span asp-validation-for="Contrasena" class="errores"></span>
+        <button type="submit" class="btn">Entrar</button>
+    </form>
+    <p>¿No tenés cuenta? <a asp-action="Registrar">Registrate</a>.</p>
+</section>

@@ -17,7 +17,20 @@
                 <a asp-controller="Pizzas" asp-action="Crear">Agregar pizza</a>
                 <a asp-controller="Pedidos" asp-action="Index">Pedidos</a>
             </nav>
-            <a class="btn btn-nav" asp-controller="Pedidos" asp-action="Crear">Hacer pedido <span aria-hidden="true">↗</span></a>
+            <div class="cuenta-nav">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <span>Hola, @User.Identity.Name</span>
+                    <form asp-controller="Cuenta" asp-action="CerrarSesion" method="post">
+                        <button type="submit" class="btn btn-nav">Cerrar sesión</button>
+                    </form>
+                }
+                else
+                {
+                    <a asp-controller="Cuenta" asp-action="IniciarSesion">Iniciar sesión</a>
+                    <a class="btn btn-nav" asp-controller="Cuenta" asp-action="Registrar">Registrarse</a>
+                }
+            </div>
         </div>
     </header>
 

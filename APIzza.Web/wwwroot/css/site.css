@@ -242,3 +242,14 @@ main.contenedor { padding-top: 30px; padding-bottom: 90px; min-height: 70vh; }
 .formulario textarea { resize:vertical; }
 .formulario select { cursor:pointer; }
 @media (max-width: 720px) { .encabezado-menu { align-items:flex-start; flex-direction:column; } }
+
+/* Cuenta: inicio de sesión y registro */
+.cuenta-nav { display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
+.cuenta-nav form { margin:0; }
+.seccion-formulario { max-width:520px; margin:48px auto; padding:28px; border-radius:16px; background:#fff; }
+.seccion-formulario h1 { margin-top:0; }
+.formulario { display:flex; flex-direction:column; gap:9px; margin:24px 0; }
+.formulario input { width:100%; box-sizing:border-box; padding:12px; border:1px solid #d6d6d6; border-radius:8px; font:inherit; }
+.formulario label { margin-top:8px; font-weight:600; }
+.formulario button { align-self:flex-start; margin-top:12px; cursor:pointer; }
+.errores { color:#b42318; font-size:.9rem; }

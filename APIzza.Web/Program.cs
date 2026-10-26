@@ -1,24 +1,46 @@
+using System.Text;
 using APIzza.Web.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// MVC: registra controladores + vistas Razor
 builder.Services.AddControllersWithViews();
 
-// Entity Framework Core conectado a MySQL local.
-// Host: 127.0.0.1 (localhost) | Puerto: 3306 | BD: apizza | Usuario: root
 var connectionString = builder.Configuration.GetConnectionString("ApizzaDb")
     ?? throw new InvalidOperationException("No se encontró ConnectionStrings:ApizzaDb en appsettings.json.");
+builder.Services.AddDbContext<ApizzaDbContext>(opciones => opciones.UseMySQL(connectionString));
 
-builder.Services.AddDbContext<ApizzaDbContext>(opciones =>
-    opciones.UseMySQL(connectionString));
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? throw new InvalidOperationException("Falta configurar Jwt:Key en appsettings.json.");
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(opciones =>
+    {
+        opciones.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            ClockSkew = TimeSpan.FromSeconds(30)
+        };
+        opciones.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = contexto =>
+            {
+                if (contexto.Request.Cookies.TryGetValue("APIzza.Auth", out var jwt))
+                    contexto.Token = jwt;
+                return Task.CompletedTask;
+            }
+        };
+    });
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Verifica/crea las tablas si el usuario todavía no ejecutó schema.sql.
-// Si ya ejecutó schema.sql, EF detecta la base existente y no vuelve a cargar el menú.
 using (var scope = app.Services.CreateScope())
 {
     var contexto = scope.ServiceProvider.GetRequiredService<ApizzaDbContext>();
@@ -27,6 +49,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",

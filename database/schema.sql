@@ -31,6 +31,7 @@ CREATE TABLE Clientes (
     Id INT NOT NULL AUTO_INCREMENT,
     Nombre VARCHAR(120) NOT NULL,
     Email VARCHAR(160) NOT NULL,
+    PasswordHash VARCHAR(500) NULL,
     Telefono VARCHAR(40) NULL,
     Direccion VARCHAR(250) NOT NULL,
     PRIMARY KEY (Id),

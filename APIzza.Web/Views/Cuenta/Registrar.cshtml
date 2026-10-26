@@ -1,0 +1,25 @@
+@model APIzza.Web.ViewModels.RegistroViewModel
+@{
+    ViewData["Title"] = "Crear cuenta";
+}
+<section class="seccion-formulario">
+    <h1>Crear cuenta</h1>
+    <p>Registrate para tener tu cuenta de APIzza.</p>
+    <form asp-action="Registrar" method="post" class="formulario">
+        <div asp-validation-summary="ModelOnly" class="errores"></div>
+        <label asp-for="Nombre"></label>
+        <input asp-for="Nombre" autocomplete="name" />
+        <span asp-validation-for="Nombre" class="errores"></span>
+        <label asp-for="Email">Correo electrónico</label>
+        <input asp-for="Email" autocomplete="email" />
+        <span asp-validation-for="Email" class="errores"></span>
+        <label asp-for="Contrasena">Contraseña (mínimo 8 caracteres)</label>
+        <input asp-for="Contrasena" autocomplete="new-password" />
+        <span asp-validation-for="Contrasena" class="errores"></span>
+        <label asp-for="ConfirmarContrasena"></label>
+        <input asp-for="ConfirmarContrasena" autocomplete="new-password" />
+        <span asp-validation-for="ConfirmarContrasena" class="errores"></span>
+        <button type="submit" class="btn">Registrarme</button>
+    </form>
+    <p>¿Ya tenés cuenta? <a asp-action="IniciarSesion">Iniciá sesión</a>.</p>
+</section>

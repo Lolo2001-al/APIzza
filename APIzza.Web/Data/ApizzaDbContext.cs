@@ -28,6 +28,7 @@ public class ApizzaDbContext : DbContext
             entity.HasIndex(c => c.Email).IsUnique();
             entity.Property(c => c.Nombre).HasMaxLength(120);
             entity.Property(c => c.Email).HasMaxLength(160);
+            entity.Property(c => c.PasswordHash).HasMaxLength(500);
             entity.Property(c => c.Telefono).HasMaxLength(40);
             entity.Property(c => c.Direccion).HasMaxLength(250);
         });
